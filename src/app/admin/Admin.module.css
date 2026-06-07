@@ -1,0 +1,168 @@
+.adminContainer {
+  display: flex;
+  min-height: 100vh;
+  background-image: radial-gradient(circle at top right, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(212, 175, 55, 0.03) 0%, transparent 40%);
+}
+
+.sidebar {
+  width: 280px;
+  background: var(--card-bg);
+  border-right: 1px solid var(--border-color);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarHeader {
+  padding: 2.5rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sidebarHeader h2 {
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.sidebarNav {
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.5rem;
+}
+
+.navLink {
+  padding: 1.2rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--secondary-text);
+  border-left: 3px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.navLinkActive {
+  background: var(--accent-glow);
+  color: var(--primary-accent);
+  border-left-color: var(--primary-accent);
+}
+
+.navLink:hover {
+  background: var(--accent-glow);
+  color: var(--primary-accent);
+  border-left-color: var(--primary-accent);
+  padding-left: 2.5rem;
+}
+
+.backLink {
+  margin-top: auto;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
+.logoutBtn {
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  border-top: 1px solid var(--border-color);
+  margin-top: 0.5rem;
+  color: #d32f2f;
+}
+
+.logoutBtn:hover {
+  background: linear-gradient(90deg, rgba(255, 77, 77, 0.1), transparent);
+  color: #ff4d4d;
+  border-left-color: #ff4d4d;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 3rem;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .adminContainer {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    height: auto;
+  }
+  
+  .sidebarNav {
+    padding: 1rem;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  
+  .navLink {
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+  }
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.statCard {
+  padding: 2.5rem;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+}
+
+.statCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px var(--accent-glow);
+  border-color: var(--primary-accent);
+}
+
+.statCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-accent), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.statCard:hover::before {
+  opacity: 1;
+}
+
+.statTitle {
+  color: var(--secondary-text);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.statValue {
+  color: var(--primary-accent);
+  font-size: 3rem;
+  font-weight: 300;
+  line-height: 1;
+}

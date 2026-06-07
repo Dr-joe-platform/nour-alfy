@@ -1,0 +1,325 @@
+.main {
+  min-height: 100vh;
+  padding-top: 80px;
+  background-color: var(--background);
+}
+
+.checkoutLayout {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 80px);
+}
+
+/* Left Column (Forms) */
+.formColumn {
+  padding: 3rem 4rem 4rem 2rem;
+  border-right: 1px solid var(--border-color);
+}
+
+.section {
+  margin-bottom: 3rem;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+}
+
+.sectionHeader h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.sectionHeader a {
+  color: var(--primary-accent);
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+.inputGroup {
+  position: relative;
+  width: 100%;
+}
+
+.inputField, .selectField {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--foreground);
+  font-size: 0.95rem;
+  transition: border-color 0.3s ease;
+}
+
+.inputField:focus, .selectField:focus {
+  outline: none;
+  border-color: var(--primary-accent);
+}
+
+.selectField {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem top 50%;
+  background-size: 0.65rem auto;
+}
+
+/* Checkboxes & Radios */
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.checkboxRow input[type="checkbox"] {
+  accent-color: var(--primary-accent);
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.checkboxRow label {
+  font-size: 0.9rem;
+  color: var(--secondary-text);
+  cursor: pointer;
+}
+
+.radioGroup {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.radioOption {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  background: rgba(0,0,0,0.02);
+  transition: background 0.3s;
+}
+
+[data-theme='dark'] .radioOption {
+  background: rgba(255,255,255,0.02);
+}
+
+.radioOption:last-child {
+  border-bottom: none;
+}
+
+.radioOption.selected {
+  background: rgba(212, 175, 55, 0.05); /* very light gold */
+}
+
+.radioLabelRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.radioLabel input[type="radio"] {
+  accent-color: var(--primary-accent);
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.paymentIcons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.paymentIcon {
+  height: 20px;
+  width: auto;
+}
+
+.radioDescription {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--secondary-text);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.infoText {
+  color: var(--secondary-text);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+/* Right Column (Summary) */
+.summaryColumn {
+  padding: 3rem 2rem 4rem 4rem;
+  background-color: var(--card-bg);
+  height: 100%;
+}
+
+.summaryItems {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.summaryItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.itemImageWrapper {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--background);
+}
+
+.itemBadge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--primary-accent);
+  color: var(--background);
+  font-size: 0.75rem;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.itemDetails {
+  flex: 1;
+}
+
+.itemDetails h4 {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.itemPrice {
+  font-weight: 500;
+}
+
+.discountSection {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.discountInput {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--foreground);
+}
+
+.applyBtn {
+  padding: 0 1.5rem;
+  background: var(--border-color);
+  color: var(--foreground);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.applyBtn:hover {
+  background: var(--primary-accent);
+  color: var(--background);
+}
+
+.totalsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  color: var(--secondary-text);
+  font-size: 0.95rem;
+}
+
+.totalRow.grandTotal {
+  color: var(--foreground);
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.totalCurrency {
+  font-size: 0.8rem;
+  color: var(--secondary-text);
+  margin-right: 0.5rem;
+}
+
+.payBtn {
+  width: 100%;
+  padding: 1.2rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+@media (max-width: 900px) {
+  .checkoutLayout {
+    grid-template-columns: 1fr;
+  }
+  
+  .formColumn {
+    padding: 2rem;
+    border-right: none;
+    order: 2;
+  }
+  
+  .summaryColumn {
+    padding: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    order: 1;
+  }
+}

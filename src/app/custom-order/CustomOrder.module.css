@@ -1,0 +1,106 @@
+.main {
+  min-height: 100vh;
+  padding-top: 100px;
+  padding-bottom: 4rem;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+.formWrapper {
+  padding: 3rem;
+  border-radius: 8px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--secondary-text);
+  font-weight: 600;
+}
+
+.inputGroup input,
+.inputGroup select,
+.inputGroup textarea {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  border-radius: 4px;
+  color: var(--foreground);
+  font-family: inherit;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+[data-theme='dark'] .inputGroup input,
+[data-theme='dark'] .inputGroup select,
+[data-theme='dark'] .inputGroup textarea {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.inputGroup select option {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus,
+.inputGroup textarea:focus {
+  outline: none;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.submitBtn {
+  margin-top: 1.5rem;
+  padding: 1.2rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  color: var(--background);
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+  
+  .formWrapper {
+    padding: 2rem;
+  }
+}

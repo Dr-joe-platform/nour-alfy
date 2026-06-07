@@ -1,0 +1,371 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useCart } from '@/components/CartContext';
+import { useToast } from '@/components/ToastContext';
+import Navbar from '@/components/Navbar';
+import Receipt from '@/components/Receipt';
+import Image from 'next/image';
+import styles from './Checkout.module.css';
+
+export default function Checkout() {
+  const router = useRouter();
+  const { showToast } = useToast();
+  const { cart, cartTotal, clearCart } = useCart();
+  const [paymentMethod, setPaymentMethod] = useState('kashier');
+  const [billingMethod, setBillingMethod] = useState('same');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successOrderId, setSuccessOrderId] = useState<string | null>(null);
+  const [placedOrder, setPlacedOrder] = useState<any>(null);
+
+  // Form State
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    address: '',
+    apartment: '',
+    city: 'Asyut',
+    email: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Static shipping fee as requested
+  const shippingFee = 100;
+  const grandTotal = cartTotal + shippingFee;
+
+  const handlePayNow = async () => {
+    if (cart.length === 0) return;
+    if (!formData.firstName || !formData.phone || !formData.address) {
+      showToast('الرجاء إدخال جميع البيانات المطلوبة (الاسم، رقم الهاتف، العنوان)');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerName: `${formData.firstName} ${formData.lastName}`.trim(),
+          customerEmail: formData.email,
+          customerPhone: formData.phone,
+          customerAddress: `${formData.address}, ${formData.apartment ? formData.apartment + ', ' : ''}${formData.city}`,
+          totalAmount: grandTotal,
+          items: cart.map(item => {
+            const priceVal = typeof item.price === 'string' ? parseInt(item.price.replace(/,/g, '')) : item.price;
+            return {
+              id: item.id,
+              name: item.name,
+              price: priceVal,
+              quantity: item.quantity,
+              img: item.img
+            };
+          })
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setSuccessOrderId(data.orderId);
+        setPlacedOrder({
+          orderId: data.orderId,
+          customerName: `${formData.firstName} ${formData.lastName}`.trim(),
+          customerPhone: formData.phone,
+          customerAddress: `${formData.address}, ${formData.apartment ? formData.apartment + ', ' : ''}${formData.city}`,
+          items: [...cart],
+          totalAmount: grandTotal,
+          date: new Date().toISOString()
+        });
+        clearCart();
+      } else {
+        showToast(data.error || 'Failed to place order.');
+      }
+    } catch (error: any) {
+      console.error("Checkout error:", error);
+      showToast(error.message || 'An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (successOrderId && placedOrder) {
+    return (
+      <main className={styles.main}>
+        <Navbar />
+        <div style={{ textAlign: 'center', marginTop: '100px', padding: '2rem' }}>
+          <h1 className="text-accent" style={{ fontFamily: 'Cinzel, serif', fontSize: '2.5rem', marginBottom: '1rem' }}>Order Placed Successfully!</h1>
+          <p style={{ color: 'var(--secondary-text)', fontSize: '1.2rem', marginBottom: '2rem' }}>Thank you for shopping with NOUR ALFY.</p>
+          
+          <div style={{ margin: '0 auto', display: 'inline-block', textAlign: 'left' }}>
+            <Receipt {...placedOrder} />
+          </div>
+
+          <div style={{ marginTop: '3rem' }}>
+            <button 
+              onClick={() => window.print()} 
+              className={`${styles.payBtn} bg-accent hover-glow`} 
+              style={{ width: 'auto', padding: '1rem 3rem', marginRight: '1rem' }}
+            >
+              Download / Print Receipt
+            </button>
+            <button 
+              onClick={() => router.push('/track-order')} 
+              className={`${styles.payBtn}`} 
+              style={{ width: 'auto', padding: '1rem 3rem', background: 'transparent', border: '1px solid var(--primary-accent)', color: 'var(--primary-accent)', marginRight: '1rem' }}
+            >
+              Track Order Now
+            </button>
+            <button 
+              onClick={() => router.push('/')} 
+              className={`${styles.payBtn}`} 
+              style={{ width: 'auto', padding: '1rem 3rem', background: 'transparent', border: '1px solid var(--primary-accent)', color: 'var(--primary-accent)' }}
+            >
+              Return Home
+            </button>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (cart.length === 0) {
+    return (
+      <main className={styles.main}>
+        <Navbar />
+        <div style={{ textAlign: 'center', marginTop: '100px' }}>
+          <h2 className="text-accent" style={{ fontFamily: 'Cinzel, serif', fontSize: '2rem' }}>Your cart is empty</h2>
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className={styles.main}>
+      <Navbar />
+      
+      <div className={styles.checkoutLayout}>
+        
+        {/* Left Column - Forms */}
+        <div className={styles.formColumn}>
+          
+          {/* Contact Section */}
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2>Contact</h2>
+              <a href="#">Sign in</a>
+            </div>
+            <div className={styles.formGrid}>
+              <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" className={styles.inputField} />
+              </div>
+              <div className={`${styles.checkboxRow} ${styles.fullWidth}`}>
+                <input type="checkbox" id="news" defaultChecked />
+                <label htmlFor="news">Email me with news and offers</label>
+              </div>
+            </div>
+          </section>
+
+          {/* Delivery Section */}
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2>Delivery</h2>
+            </div>
+            <div className={styles.formGrid}>
+              <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+                <select className={styles.selectField} defaultValue="Egypt">
+                  <option value="Egypt">Egypt</option>
+                  <option value="Other">Other Region...</option>
+                </select>
+              </div>
+              
+              <div className={styles.inputGroup}>
+                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First name" required className={styles.inputField} />
+              </div>
+              <div className={styles.inputGroup}>
+                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last name" className={styles.inputField} />
+              </div>
+
+              <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+                <input type="text" placeholder="Company (optional)" className={styles.inputField} />
+              </div>
+              
+              <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+                <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Address" required className={styles.inputField} />
+              </div>
+
+              <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+                <input type="text" name="apartment" value={formData.apartment} onChange={handleChange} placeholder="Apartment, suite, etc. (optional)" className={styles.inputField} />
+              </div>
+
+              <div className={styles.inputGroup}>
+                <input type="text" value={formData.city} readOnly placeholder="City" className={styles.inputField} />
+              </div>
+              <div className={styles.inputGroup}>
+                <select name="city" value={formData.city} onChange={handleChange} className={styles.selectField}>
+                  <option value="Cairo">Cairo</option>
+                  <option value="Alexandria">Alexandria</option>
+                  <option value="Asyut">Asyut</option>
+                  <option value="Giza">Giza</option>
+                </select>
+              </div>
+
+              <div className={styles.inputGroup}>
+                <input type="text" placeholder="Postal code (optional)" className={styles.inputField} />
+              </div>
+              
+              <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" required className={styles.inputField} />
+              </div>
+
+              <div className={`${styles.checkboxRow} ${styles.fullWidth}`}>
+                <input type="checkbox" id="saveInfo" />
+                <label htmlFor="saveInfo">Save this information for next time</label>
+              </div>
+            </div>
+          </section>
+
+          {/* Shipping Method Section */}
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2>Shipping method</h2>
+            </div>
+            <div className={styles.radioGroup}>
+              <div className={styles.radioOption}>
+                <div className={styles.radioLabelRow}>
+                  <label className={styles.radioLabel}>
+                    <input type="radio" checked readOnly />
+                    Standard
+                  </label>
+                  <span className="text-accent" style={{ fontWeight: 500 }}>EGP 100.00</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Payment Section */}
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2>Payment</h2>
+            </div>
+            <p className={styles.infoText}>All transactions are secure and encrypted.</p>
+            
+            <div className={styles.radioGroup}>
+              {/* Kashier Option */}
+              <div className={`${styles.radioOption} ${paymentMethod === 'kashier' ? styles.selected : ''}`} onClick={() => setPaymentMethod('kashier')}>
+                <div className={styles.radioLabelRow}>
+                  <label className={styles.radioLabel}>
+                    <input type="radio" checked={paymentMethod === 'kashier'} readOnly />
+                    Pay with Card, Wallet and Installment via Kashier
+                  </label>
+                  <div className={styles.paymentIcons}>
+                    {/* Placeholder for VISA / Meeza icons - using text tags for styling */}
+                    <span style={{ fontSize: '0.7rem', border: '1px solid currentColor', padding: '2px 4px', borderRadius: '2px' }}>VISA</span>
+                    <span style={{ fontSize: '0.7rem', border: '1px solid currentColor', padding: '2px 4px', borderRadius: '2px' }}>ميزة</span>
+                  </div>
+                </div>
+                {paymentMethod === 'kashier' && (
+                  <div className={styles.radioDescription}>
+                    You'll be redirected to Pay with Card, Wallet and Installment via Kashier to complete your purchase.
+                  </div>
+                )}
+              </div>
+
+              {/* COD Option */}
+              <div className={`${styles.radioOption} ${paymentMethod === 'cod' ? styles.selected : ''}`} onClick={() => setPaymentMethod('cod')}>
+                <div className={styles.radioLabelRow}>
+                  <label className={styles.radioLabel}>
+                    <input type="radio" checked={paymentMethod === 'cod'} readOnly />
+                    Cash on Delivery (COD)
+                  </label>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Billing Address Section */}
+          <section className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h2>Billing address</h2>
+            </div>
+            
+            <div className={styles.radioGroup}>
+              <div className={`${styles.radioOption} ${billingMethod === 'same' ? styles.selected : ''}`} onClick={() => setBillingMethod('same')}>
+                <div className={styles.radioLabelRow}>
+                  <label className={styles.radioLabel}>
+                    <input type="radio" checked={billingMethod === 'same'} readOnly />
+                    Same as shipping address
+                  </label>
+                </div>
+              </div>
+
+              <div className={`${styles.radioOption} ${billingMethod === 'different' ? styles.selected : ''}`} onClick={() => setBillingMethod('different')}>
+                <div className={styles.radioLabelRow}>
+                  <label className={styles.radioLabel}>
+                    <input type="radio" checked={billingMethod === 'different'} readOnly />
+                    Use a different billing address
+                  </label>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        {/* Right Column - Order Summary */}
+        <div className={styles.summaryColumn}>
+          
+          <div className={styles.summaryItems}>
+            {cart.map((item, index) => (
+              <div key={index} className={styles.summaryItem}>
+                <div className={styles.itemImageWrapper}>
+                  <Image src={item.img} alt={item.name} fill style={{ objectFit: 'cover', borderRadius: '8px' }} />
+                  <div className={styles.itemBadge}>{item.quantity}</div>
+                </div>
+                <div className={styles.itemDetails}>
+                  <h4>{item.name}</h4>
+                </div>
+                <div className={styles.itemPrice}>
+                  EGP {((typeof item.price === 'string' ? parseInt(item.price.replace(/,/g, '')) : item.price) * item.quantity).toLocaleString()}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.discountSection}>
+            <input type="text" placeholder="Add discount" className={styles.discountInput} />
+            <button className={styles.applyBtn}>Apply</button>
+          </div>
+
+          <div className={styles.totalsSection}>
+            <div className={styles.totalRow}>
+              <span>Subtotal</span>
+              <span>EGP {cartTotal.toLocaleString()}</span>
+            </div>
+            <div className={styles.totalRow}>
+              <span>Shipping</span>
+              <span>EGP {shippingFee.toFixed(2)}</span>
+            </div>
+            <div className={`${styles.totalRow} ${styles.grandTotal}`}>
+              <span>Total</span>
+              <div>
+                <span className={styles.totalCurrency}>EGP</span>
+                <span>{grandTotal.toLocaleString()}</span>
+              </div>
+            </div>
+          </div>
+
+          <button className={`${styles.payBtn} bg-accent text-accent hover-glow`} onClick={handlePayNow} disabled={isSubmitting}>
+            {isSubmitting ? 'Processing...' : 'Place Order (Cash on Delivery)'}
+          </button>
+          
+        </div>
+
+      </div>
+    </main>
+  );
+}

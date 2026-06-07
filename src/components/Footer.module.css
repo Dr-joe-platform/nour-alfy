@@ -1,0 +1,130 @@
+.footer {
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--border-color);
+  padding-top: 4rem;
+  margin-top: auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem 2rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 4rem;
+}
+
+.brandSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.brandName {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  letter-spacing: 4px;
+  color: var(--foreground);
+  margin-bottom: -5px;
+}
+
+.brandTagline {
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.8rem;
+  color: var(--primary-accent);
+  margin-bottom: 1.5rem;
+}
+
+.brandDescription {
+  color: var(--secondary-text);
+  line-height: 1.8;
+  max-width: 400px;
+}
+
+.linksSection h3,
+.contactSection h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+  color: var(--foreground);
+}
+
+.linksSection ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.linksSection a {
+  color: var(--secondary-text);
+  transition: color 0.3s ease;
+}
+
+.linksSection a:hover {
+  color: var(--primary-accent);
+}
+
+.contactList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.contactList li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--secondary-text);
+}
+
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+}
+
+.socialIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  color: var(--foreground);
+  transition: all 0.3s ease;
+}
+
+.socialIcon:hover {
+  background-color: var(--primary-accent);
+  border-color: var(--primary-accent);
+  color: var(--background);
+  transform: translateY(-3px);
+}
+
+.bottomBar {
+  text-align: center;
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme='dark'] .bottomBar {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.bottomBar p {
+  color: var(--secondary-text);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
