@@ -162,7 +162,7 @@ export default function AdminProducts() {
         </div>
         <button 
           onClick={handleAddNewClick}
-          className={`bg-accent text-accent hover-glow ${styles.addBtn}`}
+          className={`bg-accent hover-glow ${styles.addBtn}`}
           style={{ padding: '0.8rem 2rem', borderRadius: '30px' }}
         >
           {showAddForm ? 'Cancel' : '+ Add New Product'}

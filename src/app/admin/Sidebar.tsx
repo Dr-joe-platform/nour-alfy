@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Package, ShoppingBag, MessageSquare, LayoutDashboard, Sun, Moon } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 import styles from './Admin.module.css';
-import LogoutButton from './LogoutButton';
+
 
 export default function AdminSidebar() {
   const pathname = usePathname();
@@ -60,7 +60,7 @@ export default function AdminSidebar() {
             <><Moon size={20} /> Dark Mode</>
           )}
         </button>
-        <LogoutButton />
+
       </nav>
     </aside>
   );
