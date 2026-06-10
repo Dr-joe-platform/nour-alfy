@@ -1,26 +1,42 @@
+'use client';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import styles from './page.module.css';
 
 export default function Home() {
+  const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    // Sequence timeline
+    const t1 = setTimeout(() => setStep(1), 1500); // Shrink logo
+    const t2 = setTimeout(() => setStep(2), 3000); // Show navbar
+    const t3 = setTimeout(() => setStep(3), 3800); // Show title
+    const t4 = setTimeout(() => setStep(4), 4600); // Show subtitle
+    const t5 = setTimeout(() => setStep(5), 5400); // Show buttons
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); };
+  }, []);
+
   return (
     <main className={styles.main}>
-      <Navbar />
+      <div className={`${styles.navWrapper} ${step >= 2 ? styles.navVisible : styles.navHidden}`}>
+        <Navbar />
+      </div>
 
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroOverlay}></div>
         <div className={styles.heroContent}>
-          <div className={styles.logoContainer}>
-            <img src="/products/logo-light.png" alt="NOUR ALFY Logo" style={{ width: '150px', height: 'auto' }} className={`site-logo logo-light ${styles.heroLogo}`} />
+          <div className={`${styles.logoContainer} ${step === 0 ? styles.logoLarge : styles.logoNormal}`}>
+            <img src="/products/logo-splash.png" alt="NOUR ALFY Logo" style={{ width: '150px', height: 'auto' }} className={`site-logo logo-light ${styles.heroLogo}`} />
             <img src="/products/logo-dark.png" alt="NOUR ALFY Logo" style={{ width: '150px', height: 'auto' }} className={`site-logo logo-dark ${styles.heroLogo}`} />
           </div>
-          <h1 className="animate-fade-in text-accent">NOUR ALFY</h1>
-          <p className={`${styles.scriptText} animate-fade-in`} style={{ animationDelay: '0.2s' }}>
+          <h1 className={`text-accent ${styles.staggerItem} ${step >= 3 ? styles.visibleItem : styles.hiddenItem}`}>NOUR ALFY</h1>
+          <p className={`${styles.scriptText} ${styles.staggerItem} ${step >= 4 ? styles.visibleItem : styles.hiddenItem}`}>
             handmade products
           </p>
-          <div className={`${styles.ctaGroup} animate-fade-in`} style={{ animationDelay: '0.4s' }}>
+          <div className={`${styles.ctaGroup} ${styles.staggerItem} ${step >= 5 ? styles.visibleItem : styles.hiddenItem}`}>
             <Link href="/shop" className={`${styles.btnPrimary} bg-accent premium-shadow hover-glow`}>
               Explore Collection
             </Link>

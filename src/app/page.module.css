@@ -18,6 +18,36 @@
   padding-bottom: 4rem; /* add bottom padding */
 }
 
+.navWrapper {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1.2s ease;
+}
+.navHidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+.navVisible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.splashLogo {
+  width: 250px;
+  height: auto;
+  animation: pulseLogo 2s infinite ease-in-out;
+}
+
+@keyframes pulseLogo {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
 .heroOverlay {
   position: absolute;
   top: 0;
@@ -41,6 +71,30 @@
 
 .logoContainer {
   margin-bottom: 1rem;
+  transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.logoLarge {
+  transform: scale(2.5) translateY(20px);
+}
+
+.logoNormal {
+  transform: scale(1) translateY(0);
+}
+
+.staggerItem {
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.hiddenItem {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.visibleItem {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .heroLogo {
