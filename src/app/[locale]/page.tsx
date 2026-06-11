@@ -61,7 +61,7 @@ export default function Home() {
             <img src="/products/logo-dark.png" alt="NOUR ALFY Logo" style={{ width: '150px', height: 'auto' }} className={`site-logo logo-dark ${styles.heroLogo}`} />
           </div>
           <h1 className={`text-accent ${styles.staggerItem} ${step >= 3 ? styles.visibleItem : styles.hiddenItem}`}>NOUR ALFY</h1>
-          <div className={`${styles.heroSubtitle} ${step >= 4 ? styles.visibleItem : styles.hiddenItem}`}>
+          <div className={`${styles.scriptText} ${styles.heroSubtitle} ${step >= 4 ? styles.visibleItem : styles.hiddenItem}`}>
           {t('heroSubtitle')}
         </div>
           <div className={`${styles.ctaGroup} ${styles.staggerItem} ${step >= 5 ? styles.visibleItem : styles.hiddenItem}`}>
