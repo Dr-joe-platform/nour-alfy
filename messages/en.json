@@ -1,0 +1,15 @@
+{
+  "Navbar": {
+    "home": "Home",
+    "shop": "Shop",
+    "ourCraft": "Our Craft",
+    "customOrder": "Custom Order",
+    "trackOrder": "Track Order"
+  },
+  "Home": {
+    "heroSubtitle": "handmade products",
+    "featuredTitle": "Featured Masterpieces",
+    "viewShop": "View Entire Shop",
+    "loading": "Loading featured collection..."
+  }
+}

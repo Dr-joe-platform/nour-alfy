@@ -1,6 +1,7 @@
 'use client'
 
-import Link from 'next/link';
+import {Link, usePathname, useRouter} from '@/i18n/routing';
+import { useTranslations, useLocale } from 'next-intl';
 import { ShoppingCart, Menu, X, Sun, Moon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTheme } from './ThemeProvider';
@@ -13,6 +14,16 @@ export default function Navbar() {
   const { cart, setIsCartOpen } = useCart();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  const t = useTranslations('Navbar');
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const toggleLanguage = () => {
+    const nextLocale = locale === 'en' ? 'ar' : 'en';
+    router.replace(pathname, {locale: nextLocale});
+  };
 
   useEffect(() => {
     const controlNavbar = () => {
@@ -56,14 +67,17 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className={styles.navLinks}>
-          <Link href="/" className="hover-glow">Home</Link>
-          <Link href="/shop" className="hover-glow">Shop</Link>
-          <Link href="/about" className="hover-glow">Our Craft</Link>
-          <Link href="/custom-order" className="hover-glow">Custom Order</Link>
-          <Link href="/track-order" className="hover-glow">Track Order</Link>
+          <Link href="/" className="hover-glow">{t('home')}</Link>
+          <Link href="/shop" className="hover-glow">{t('shop')}</Link>
+          <Link href="/about" className="hover-glow">{t('ourCraft')}</Link>
+          <Link href="/custom-order" className="hover-glow">{t('customOrder')}</Link>
+          <Link href="/track-order" className="hover-glow">{t('trackOrder')}</Link>
         </div>
 
         <div className={styles.navActions}>
+          <button onClick={toggleLanguage} className={`${styles.iconBtn} text-accent hover-glow`} aria-label="Toggle Language" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+            {locale === 'en' ? 'AR' : 'EN'}
+          </button>
           <button onClick={toggleTheme} className={`${styles.iconBtn} text-accent hover-glow`} aria-label="Toggle Theme">
             {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
           </button>
@@ -98,11 +112,11 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isOpen && (
         <div className={`${styles.mobileMenu} glass-panel animate-fade-in`}>
-          <Link href="/" onClick={() => setIsOpen(false)}>Home</Link>
-          <Link href="/shop" onClick={() => setIsOpen(false)}>Shop</Link>
-          <Link href="/about" onClick={() => setIsOpen(false)}>Our Craft</Link>
-          <Link href="/custom-order" onClick={() => setIsOpen(false)}>Custom Order</Link>
-          <Link href="/track-order" onClick={() => setIsOpen(false)}>Track Order</Link>
+          <Link href="/" onClick={() => setIsOpen(false)}>{t('home')}</Link>
+          <Link href="/shop" onClick={() => setIsOpen(false)}>{t('shop')}</Link>
+          <Link href="/about" onClick={() => setIsOpen(false)}>{t('ourCraft')}</Link>
+          <Link href="/custom-order" onClick={() => setIsOpen(false)}>{t('customOrder')}</Link>
+          <Link href="/track-order" onClick={() => setIsOpen(false)}>{t('trackOrder')}</Link>
         </div>
       )}
     </nav>

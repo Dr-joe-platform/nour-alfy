@@ -198,3 +198,10 @@ button {
     border: none;
   }
 }
+.font-arabic {
+  font-family: 'Cairo', sans-serif;
+}
+
+.font-arabic h1, .font-arabic h2, .font-arabic h3, .font-arabic h4, .font-arabic h5, .font-arabic h6 {
+  font-family: 'Cairo', sans-serif;
+}

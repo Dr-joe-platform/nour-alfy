@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
+import { useTranslations } from 'next-intl';
 import styles from './page.module.css';
 
 export default function Home() {
   const [step, setStep] = useState(0);
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
+  const t = useTranslations('Home');
 
   useEffect(() => {
     // Sequence timeline
@@ -59,9 +61,9 @@ export default function Home() {
             <img src="/products/logo-dark.png" alt="NOUR ALFY Logo" style={{ width: '150px', height: 'auto' }} className={`site-logo logo-dark ${styles.heroLogo}`} />
           </div>
           <h1 className={`text-accent ${styles.staggerItem} ${step >= 3 ? styles.visibleItem : styles.hiddenItem}`}>NOUR ALFY</h1>
-          <p className={`${styles.scriptText} ${styles.staggerItem} ${step >= 4 ? styles.visibleItem : styles.hiddenItem}`}>
-            handmade products
-          </p>
+          <div className={`${styles.heroSubtitle} ${step >= 4 ? styles.visibleItem : styles.hiddenItem}`}>
+          {t('heroSubtitle')}
+        </div>
           <div className={`${styles.ctaGroup} ${styles.staggerItem} ${step >= 5 ? styles.visibleItem : styles.hiddenItem}`}>
             <Link href="/shop" className={`${styles.btnPrimary} bg-accent premium-shadow hover-glow`}>
               Explore Collection
@@ -122,7 +124,7 @@ export default function Home() {
 
       {/* Featured Masterpieces */}
       <section className={styles.featured}>
-        <h2 className={`text-accent ${styles.sectionTitle}`}>Featured Masterpieces</h2>
+        <h2 className={`text-accent ${styles.sectionTitle}`}>{t('featuredTitle')}</h2>
         <div className={styles.productGrid}>
           {featuredProducts.length > 0 ? (
             featuredProducts.map((product) => (
@@ -143,12 +145,12 @@ export default function Home() {
               </Link>
             ))
           ) : (
-            <p style={{ textAlign: 'center', width: '100%', color: 'var(--secondary-text)' }}>Loading featured collection...</p>
+            <p style={{ textAlign: 'center', width: '100%', color: 'var(--secondary-text)' }}>{t('loading')}</p>
           )}
         </div>
         <div style={{ textAlign: 'center', marginTop: '3rem' }}>
           <Link href="/shop" className={`${styles.btnSecondary} accent-border text-accent premium-shadow hover-glow`}>
-            View Entire Shop
+            {t('viewShop')}
           </Link>
         </div>
       </section>

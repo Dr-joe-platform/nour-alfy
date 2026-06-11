@@ -1,4 +1,4 @@
-import './globals.css'
+import '../globals.css'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -25,21 +25,34 @@ import CartDrawer from '@/components/CartDrawer'
 import ConditionalFooter from '@/components/ConditionalFooter'
 import WhatsAppWidget from '@/components/WhatsAppWidget'
 
-export default function RootLayout({
+import {NextIntlClientProvider} from 'next-intl';
+import {getMessages} from 'next-intl/server';
+
+export default async function LocaleLayout({
   children,
+  params
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
+  params: Promise<{locale: string}>;
 }) {
+  const { locale } = await params;
+  const messages = await getMessages();
+  const isArabic = locale === 'ar';
+
   return (
-    <html lang="en">
+    <html lang={locale} dir={isArabic ? 'rtl' : 'ltr'}>
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet" />
+        {isArabic && (
+          <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet" />
+        )}
       </head>
-      <body>
-        <ThemeProvider>
+      <body className={isArabic ? 'font-arabic' : ''}>
+        <NextIntlClientProvider messages={messages}>
+          <ThemeProvider>
           <ToastProvider>
             <CartProvider>
               <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -51,6 +64,7 @@ export default function RootLayout({
             </CartProvider>
           </ToastProvider>
         </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

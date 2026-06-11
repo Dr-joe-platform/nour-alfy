@@ -1,0 +1,15 @@
+{
+  "Navbar": {
+    "home": "الرئيسية",
+    "shop": "المتجر",
+    "ourCraft": "حرفتنا",
+    "customOrder": "تصميم خاص",
+    "trackOrder": "تتبع طلبك"
+  },
+  "Home": {
+    "heroSubtitle": "منتجات يدوية فاخرة",
+    "featuredTitle": "تشكيلات مميزة",
+    "viewShop": "تصفح المتجر بالكامل",
+    "loading": "جاري تحميل التشكيلة..."
+  }
+}
