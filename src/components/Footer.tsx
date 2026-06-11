@@ -34,9 +34,9 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <a href="mailto:nouralfy2026@gmail.com" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'inherit', textDecoration: 'none' }}>
+              <a href="mailto:nouralfy26@gmail.com" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'inherit', textDecoration: 'none' }}>
                 <Mail size={18} className="text-accent" />
-                <span>nouralfy2026@gmail.com</span>
+                <span>nouralfy26@gmail.com</span>
               </a>
             </li>
           </ul>
