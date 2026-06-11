@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import AddToCartBtn from '@/components/AddToCartBtn';
+import WishlistBtn from '@/components/WishlistBtn';
 import { Search, Filter, ChevronDown } from 'lucide-react';
 import styles from './Shop.module.css';
 
@@ -175,6 +176,9 @@ export default function Shop() {
                         fill 
                         style={{ objectFit: 'cover' }} 
                       />
+                      <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 10 }}>
+                        <WishlistBtn product={{...product, img: getFirstImage(product.images)}} />
+                      </div>
                     </div>
                     <div className={styles.productInfo}>
                       <span className={styles.productCategory}>{product.category}</span>

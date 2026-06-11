@@ -19,6 +19,11 @@ export default function Checkout() {
   const [successOrderId, setSuccessOrderId] = useState<string | null>(null);
   const [placedOrder, setPlacedOrder] = useState<any>(null);
 
+  // Promo Code State
+  const [promoInput, setPromoInput] = useState('');
+  const [appliedPromo, setAppliedPromo] = useState<{code: string, type: string, value: number} | null>(null);
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
+
   // Form State
   const [formData, setFormData] = useState({
     firstName: '',
@@ -36,7 +41,43 @@ export default function Checkout() {
 
   // Static shipping fee as requested
   const shippingFee = 100;
-  const grandTotal = cartTotal + shippingFee;
+  
+  // Calculate discount
+  let discountAmount = 0;
+  if (appliedPromo) {
+    if (appliedPromo.type === 'percentage') {
+      discountAmount = (cartTotal * appliedPromo.value) / 100;
+    } else {
+      discountAmount = appliedPromo.value;
+    }
+  }
+  
+  const grandTotal = Math.max(0, cartTotal + shippingFee - discountAmount);
+
+  const handleApplyDiscount = async () => {
+    if (!promoInput) return;
+    setIsApplyingPromo(true);
+    try {
+      const res = await fetch('/api/promo-codes/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: promoInput })
+      });
+      const data = await res.json();
+      
+      if (data.valid) {
+        setAppliedPromo(data.discount);
+        setPromoInput('');
+        showToast('Promo code applied successfully!');
+      } else {
+        showToast(data.error || 'Invalid promo code');
+      }
+    } catch (error) {
+      showToast('Error validating promo code');
+    } finally {
+      setIsApplyingPromo(false);
+    }
+  };
 
   const handlePayNow = async () => {
     if (cart.length === 0) return;
@@ -56,6 +97,8 @@ export default function Checkout() {
           customerPhone: formData.phone,
           customerAddress: `${formData.address}, ${formData.apartment ? formData.apartment + ', ' : ''}${formData.city}`,
           totalAmount: grandTotal,
+          discount: discountAmount,
+          promoCode: appliedPromo?.code || null,
           items: cart.map(item => {
             const priceVal = typeof item.price === 'string' ? parseInt(item.price.replace(/,/g, '')) : item.price;
             return {
@@ -337,8 +380,31 @@ export default function Checkout() {
           </div>
 
           <div className={styles.discountSection}>
-            <input type="text" placeholder="Add discount" className={styles.discountInput} />
-            <button className={styles.applyBtn}>Apply</button>
+            {appliedPromo ? (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', padding: '0.8rem', background: 'rgba(46, 213, 115, 0.1)', border: '1px dashed #2ed573', borderRadius: '4px' }}>
+                <div>
+                  <span style={{ fontWeight: 600, color: '#2ed573' }}>{appliedPromo.code}</span> applied
+                </div>
+                <button onClick={() => setAppliedPromo(null)} style={{ background: 'none', border: 'none', color: 'var(--secondary-text)', cursor: 'pointer', textDecoration: 'underline' }}>Remove</button>
+              </div>
+            ) : (
+              <>
+                <input 
+                  type="text" 
+                  placeholder="Add discount" 
+                  className={styles.discountInput} 
+                  value={promoInput}
+                  onChange={e => setPromoInput(e.target.value)}
+                />
+                <button 
+                  className={styles.applyBtn} 
+                  onClick={handleApplyDiscount}
+                  disabled={isApplyingPromo || !promoInput}
+                >
+                  {isApplyingPromo ? '...' : 'Apply'}
+                </button>
+              </>
+            )}
           </div>
 
           <div className={styles.totalsSection}>
@@ -350,6 +416,12 @@ export default function Checkout() {
               <span>Shipping</span>
               <span>EGP {shippingFee.toFixed(2)}</span>
             </div>
+            {discountAmount > 0 && (
+              <div className={styles.totalRow} style={{ color: '#2ed573' }}>
+                <span>Discount ({appliedPromo?.code})</span>
+                <span>- EGP {discountAmount.toLocaleString()}</span>
+              </div>
+            )}
             <div className={`${styles.totalRow} ${styles.grandTotal}`}>
               <span>Total</span>
               <div>

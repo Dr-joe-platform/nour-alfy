@@ -1,10 +1,11 @@
 import { db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, limit, getDocs } from 'firebase/firestore';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import AddToCartBtn from '@/components/AddToCartBtn';
 import ProductGallery from '@/components/ProductGallery';
+import WishlistBtn from '@/components/WishlistBtn';
 import styles from './ProductDetails.module.css';
 
 export default async function ProductDetails({ params }: { params: Promise<{ id: string }> }) {
@@ -32,6 +33,28 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
     }
   } catch (e) {
     images = [];
+  }
+
+  // Fetch related products
+  let relatedProducts: any[] = [];
+  try {
+    if (product.category) {
+      const q = query(
+        collection(db, 'products'),
+        where('category', '==', product.category),
+        limit(4)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((docSnap) => {
+        if (docSnap.id !== product.id) {
+          relatedProducts.push({ id: docSnap.id, ...docSnap.data() });
+        }
+      });
+      // Ensure we only have max 3 related products
+      relatedProducts = relatedProducts.slice(0, 3);
+    }
+  } catch (error) {
+    console.error("Firebase related products fetch error:", error);
   }
 
   const mainImage = images.length > 0 ? images[0] : '/products/bag1.jpeg';
@@ -70,15 +93,28 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
               </div>
             </div>
 
-            <AddToCartBtn 
-              product={{
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                img: mainImage
-              }} 
-              className={`${styles.addToCartBtn} bg-accent hover-glow`} 
-            />
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '1rem' }}>
+              <AddToCartBtn 
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  img: mainImage
+                }} 
+                className={`${styles.addToCartBtn} bg-accent hover-glow`} 
+              />
+              <WishlistBtn 
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  img: mainImage,
+                  category: product.category
+                }} 
+                size={24}
+                className="hover-glow"
+              />
+            </div>
           </div>
         </div>
 
@@ -89,20 +125,34 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
             <div className={styles.divider}></div>
           </div>
           <div className={styles.similarGrid}>
-            {[2, 3, 4].map((i) => (
-              <Link href={`/product/${i}`} key={i}>
-                <div className={`${styles.productCard} glass-panel premium-shadow hover-glow animate-fade-in`} style={{ animationDelay: `${i * 0.1}s` }}>
-                  <div className={styles.productImageSm}>
-                    <img src="/products/logo-light.png" alt="Similar Product" style={{ width: '100%', height: '100%', objectFit: 'contain' }} className="site-logo logo-light" />
-                    <img src="/products/logo-dark.png" alt="Similar Product" style={{ width: '100%', height: '100%', objectFit: 'contain' }} className="site-logo logo-dark" />
-                  </div>
-                  <div className={styles.productInfoSm}>
-                    <h3>Handcrafted Item {i}</h3>
-                    <p className="text-accent">EGP 1,{i}00</p>
-                  </div>
-                </div>
-              </Link>
-            ))}
+            {relatedProducts.length > 0 ? (
+              relatedProducts.map((relProd, index) => {
+                let relImages: string[] = [];
+                try {
+                  relImages = relProd.images ? JSON.parse(relProd.images) : [];
+                } catch (e) {}
+                const relImg = relImages.length > 0 ? relImages[0] : '/products/bag1.jpeg';
+
+                return (
+                  <Link href={`/product/${relProd.id}`} key={relProd.id}>
+                    <div className={`${styles.productCard} glass-panel premium-shadow hover-glow animate-fade-in`} style={{ animationDelay: `${(index + 1) * 0.1}s`, position: 'relative' }}>
+                      <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 10 }}>
+                        <WishlistBtn product={{...relProd, img: relImg}} />
+                      </div>
+                      <div className={styles.productImageSm}>
+                        <img src={relImg} alt={relProd.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                      </div>
+                      <div className={styles.productInfoSm}>
+                        <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{relProd.name}</h3>
+                        <p className="text-accent">EGP {relProd.price?.toLocaleString() || 0}</p>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })
+            ) : (
+              <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: 'var(--secondary-text)' }}>No similar products found.</p>
+            )}
           </div>
         </section>
 
