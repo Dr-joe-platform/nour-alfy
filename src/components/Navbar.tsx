@@ -20,11 +20,6 @@ export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const toggleLanguage = () => {
-    const nextLocale = locale === 'en' ? 'ar' : 'en';
-    router.replace(pathname, {locale: nextLocale});
-  };
-
   useEffect(() => {
     const controlNavbar = () => {
       if (typeof window !== 'undefined') {
@@ -75,9 +70,6 @@ export default function Navbar() {
         </div>
 
         <div className={styles.navActions}>
-          <button onClick={toggleLanguage} className={`${styles.iconBtn} text-accent hover-glow`} aria-label="Toggle Language" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-            {locale === 'en' ? 'AR' : 'EN'}
-          </button>
           <button onClick={toggleTheme} className={`${styles.iconBtn} text-accent hover-glow`} aria-label="Toggle Theme">
             {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
           </button>

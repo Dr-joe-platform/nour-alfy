@@ -60,6 +60,25 @@ export default function AdminCustomRequests() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this custom request?')) return;
+    
+    try {
+      const res = await fetch(`/api/custom-requests/${id}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        setRequests(requests.filter(req => req.id !== id));
+        showToast('Request deleted successfully');
+      } else {
+        showToast('Failed to delete request');
+      }
+    } catch (error) {
+      console.error('Error deleting request:', error);
+      showToast('Error deleting request');
+    }
+  };
+
   return (
     <div className="animate-fade-in" style={{ paddingBottom: '2rem' }}>
       <div className={styles.header} style={{ marginBottom: '3rem' }}>
@@ -124,8 +143,24 @@ export default function AdminCustomRequests() {
                         <option value="COMPLETED">Completed</option>
                       </select>
                     </td>
-                    <td>
-                      <button className={styles.actionBtn} onClick={() => showToast(`Full Idea: ${req.idea}`)}>View Details</button>
+                    <td style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      <button className={styles.actionBtn} onClick={() => showToast(`Full Idea: ${req.idea}`)}>Details</button>
+                      <a 
+                        href={`https://wa.me/${req.phone.replace(/[^0-9]/g, '')}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className={styles.actionBtn}
+                        style={{ backgroundColor: '#25D366', color: 'white', borderColor: '#25D366', textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}
+                      >
+                        WhatsApp
+                      </a>
+                      <button 
+                        className={styles.actionBtn} 
+                        onClick={() => handleDelete(req.id)}
+                        style={{ borderColor: 'rgba(255, 71, 87, 0.5)', color: '#ff4757' }}
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))
