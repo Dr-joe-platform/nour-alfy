@@ -1,15 +1,25 @@
 'use client';
 
-import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { MessageCircle, X } from 'lucide-react';
 import styles from './WhatsAppWidget.module.css';
 
 export default function WhatsAppWidget() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  
-  if (pathname?.startsWith('/admin') || pathname?.startsWith('/login')) {
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Hide in Admin Panel
+  if (mounted && pathname?.includes('/admin')) {
     return null;
   }
+
+  if (!mounted) return null;
 
   const phoneNumber = '201022702111'; // Without '+'
   const message = 'Hello NOUR ALFY, I have an inquiry about your products.';

@@ -58,6 +58,12 @@ export default function AdminSidebar() {
         >
           <Tag size={20} /> Promo Codes
         </Link>
+        <Link 
+          href="/admin/shipping" 
+          className={`${styles.navLink} ${isActive('/admin/shipping') ? styles.navLinkActive : ''}`}
+        >
+          <Truck size={20} /> Shipping Rates
+        </Link>
         <Link href="/" className={`${styles.navLink} ${styles.backLink}`}>
           &larr; Back to Store
         </Link>
