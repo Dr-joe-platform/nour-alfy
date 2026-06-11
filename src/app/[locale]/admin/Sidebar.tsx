@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Package, ShoppingBag, MessageSquare, LayoutDashboard, Sun, Moon, Mail, Tag } from 'lucide-react';
+import { Package, ShoppingBag, MessageSquare, LayoutDashboard, Sun, Moon, Mail, Tag, Truck } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 import styles from './Admin.module.css';
 

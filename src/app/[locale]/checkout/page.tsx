@@ -13,11 +13,13 @@ export default function Checkout() {
   const router = useRouter();
   const { showToast } = useToast();
   const { cart, cartTotal, clearCart } = useCart();
-  const [paymentMethod, setPaymentMethod] = useState('kashier');
   const [billingMethod, setBillingMethod] = useState('same');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successOrderId, setSuccessOrderId] = useState<string | null>(null);
   const [placedOrder, setPlacedOrder] = useState<any>(null);
+
+  // Shipping Settings State
+  const [shippingSettings, setShippingSettings] = useState<{defaultRate: number, overrides: Record<string, number>} | null>(null);
 
   // Promo Code State
   const [promoInput, setPromoInput] = useState('');
@@ -42,6 +44,16 @@ export default function Checkout() {
 
   const [errors, setErrors] = useState<Record<string, boolean>>({});
 
+  useEffect(() => {
+    // Fetch shipping settings on mount
+    fetch('/api/settings/shipping')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.error) setShippingSettings(data);
+      })
+      .catch(err => console.error("Failed to load shipping settings", err));
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (errors[e.target.name]) {
@@ -49,8 +61,15 @@ export default function Checkout() {
     }
   };
 
-  // Static shipping fee as requested
-  const shippingFee = 100;
+  // Dynamic shipping fee calculation
+  let shippingFee = 100; // fallback
+  if (shippingSettings) {
+    if (shippingSettings.overrides && shippingSettings.overrides[formData.city] !== undefined) {
+      shippingFee = shippingSettings.overrides[formData.city];
+    } else {
+      shippingFee = shippingSettings.defaultRate;
+    }
+  }
   
   // Calculate discount
   let discountAmount = 0;
@@ -113,13 +132,6 @@ export default function Checkout() {
     }
     
     setIsSubmitting(true);
-    
-    // If Kashier, simulate redirect (since we don't have API keys yet)
-    if (paymentMethod === 'kashier') {
-      showToast('Redirecting to Kashier Secure Payment...');
-      // Simulated delay for "redirect"
-      await new Promise(resolve => setTimeout(resolve, 1500));
-    }
 
     try {
       const response = await fetch('/api/orders', {
@@ -133,7 +145,7 @@ export default function Checkout() {
           billingAddress: billingMethod === 'different' 
             ? `${formData.billingAddress}, ${formData.billingApartment ? formData.billingApartment + ', ' : ''}${formData.billingCity}` 
             : 'Same as shipping',
-          paymentMethod: paymentMethod,
+          paymentMethod: 'cod',
           totalAmount: grandTotal,
           discount: discountAmount,
           promoCode: appliedPromo?.code || null,
@@ -319,15 +331,15 @@ export default function Checkout() {
                 <div className={styles.radioLabelRow}>
                   <label className={styles.radioLabel}>
                     <input type="radio" checked readOnly />
-                    Standard
+                    Standard Delivery to {formData.city}
                   </label>
-                  <span className="text-accent" style={{ fontWeight: 500 }}>EGP 100.00</span>
+                  <span className="text-accent" style={{ fontWeight: 500 }}>EGP {shippingFee.toFixed(2)}</span>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Payment Section */}
+          {/* Payment Section (Simplified to COD only) */}
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <h2>Payment</h2>
@@ -335,31 +347,10 @@ export default function Checkout() {
             <p className={styles.infoText}>All transactions are secure and encrypted.</p>
             
             <div className={styles.radioGroup}>
-              {/* Kashier Option */}
-              <div className={`${styles.radioOption} ${paymentMethod === 'kashier' ? styles.selected : ''}`} onClick={() => setPaymentMethod('kashier')}>
+              <div className={`${styles.radioOption} ${styles.selected}`}>
                 <div className={styles.radioLabelRow}>
                   <label className={styles.radioLabel}>
-                    <input type="radio" checked={paymentMethod === 'kashier'} readOnly />
-                    Pay with Card, Wallet and Installment via Kashier
-                  </label>
-                  <div className={styles.paymentIcons}>
-                    {/* Placeholder for VISA / Meeza icons - using text tags for styling */}
-                    <span style={{ fontSize: '0.7rem', border: '1px solid currentColor', padding: '2px 4px', borderRadius: '2px' }}>VISA</span>
-                    <span style={{ fontSize: '0.7rem', border: '1px solid currentColor', padding: '2px 4px', borderRadius: '2px' }}>ميزة</span>
-                  </div>
-                </div>
-                {paymentMethod === 'kashier' && (
-                  <div className={styles.radioDescription}>
-                    You'll be redirected to Pay with Card, Wallet and Installment via Kashier to complete your purchase.
-                  </div>
-                )}
-              </div>
-
-              {/* COD Option */}
-              <div className={`${styles.radioOption} ${paymentMethod === 'cod' ? styles.selected : ''}`} onClick={() => setPaymentMethod('cod')}>
-                <div className={styles.radioLabelRow}>
-                  <label className={styles.radioLabel}>
-                    <input type="radio" checked={paymentMethod === 'cod'} readOnly />
+                    <input type="radio" checked readOnly />
                     Cash on Delivery (COD)
                   </label>
                 </div>
@@ -497,7 +488,7 @@ export default function Checkout() {
           </div>
 
           <button className={`${styles.payBtn} bg-accent text-accent hover-glow`} onClick={handlePayNow} disabled={isSubmitting}>
-            {isSubmitting ? 'Processing...' : paymentMethod === 'kashier' ? 'Proceed to Payment (Kashier)' : 'Place Order (Cash on Delivery)'}
+            {isSubmitting ? 'Processing...' : 'Place Order (Cash on Delivery)'}
           </button>
           
         </div>
