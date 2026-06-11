@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import styles from '../app/product/[id]/ProductDetails.module.css';
+import styles from '../app/[locale]/product/[id]/ProductDetails.module.css';
 
 export default function ProductGallery({ images }: { images: string[] }) {
   const [mainImage, setMainImage] = useState(images[0] || '/products/bag1.jpeg');
