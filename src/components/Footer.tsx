@@ -35,7 +35,7 @@ export default function Footer() {
             </li>
             <li>
               <Mail size={18} className="text-accent" />
-              <span>info@nouralfy.com</span>
+              <span>nouralfy2026@gmail.com</span>
             </li>
           </ul>
           
