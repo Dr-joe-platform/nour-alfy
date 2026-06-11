@@ -7,6 +7,7 @@ import styles from './page.module.css';
 
 export default function Home() {
   const [step, setStep] = useState(0);
+  const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
 
   useEffect(() => {
     // Sequence timeline
@@ -15,8 +16,33 @@ export default function Home() {
     const t3 = setTimeout(() => setStep(3), 3800); // Show title
     const t4 = setTimeout(() => setStep(4), 4600); // Show subtitle
     const t5 = setTimeout(() => setStep(5), 5400); // Show buttons
+
+    // Fetch featured products
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setFeaturedProducts(data.slice(0, 3));
+        }
+      } catch (error) {
+        console.error('Error fetching featured products:', error);
+      }
+    };
+    fetchProducts();
+
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); clearTimeout(t5); };
   }, []);
+
+  const getFirstImage = (imagesStr: string | null) => {
+    if (!imagesStr) return '/products/bag1.jpeg';
+    try {
+      const parsed = JSON.parse(imagesStr);
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed[0] : '/products/bag1.jpeg';
+    } catch (e) {
+      return '/products/bag1.jpeg';
+    }
+  };
 
   return (
     <main className={styles.main}>
@@ -98,23 +124,27 @@ export default function Home() {
       <section className={styles.featured}>
         <h2 className={`text-accent ${styles.sectionTitle}`}>Featured Masterpieces</h2>
         <div className={styles.productGrid}>
-          {["/products/feat1-new.jpeg", "/products/feat2-new.jpeg", "/products/feat3-new.jpeg"].map((imgSrc, i) => (
-            <Link href={`/product/${i + 1}`} key={i} className={`${styles.productCard} glass-panel premium-shadow hover-glow`}>
-              <div className={styles.productImagePlaceholder}>
-                <Image 
-                  src={imgSrc} 
-                  alt="Product" 
-                  fill 
-                  style={{ objectFit: 'cover' }} 
-                />
-              </div>
-              <div className={styles.productInfo}>
-                <span className={styles.categoryLabel}>Bags</span>
-                <h3>Handcrafted Leather Bag {i + 1}</h3>
-                <p className="text-accent">EGP 1,200</p>
-              </div>
-            </Link>
-          ))}
+          {featuredProducts.length > 0 ? (
+            featuredProducts.map((product) => (
+              <Link href={`/product/${product.id}`} key={product.id} className={`${styles.productCard} glass-panel premium-shadow hover-glow`}>
+                <div className={styles.productImagePlaceholder}>
+                  <Image 
+                    src={getFirstImage(product.images)} 
+                    alt={product.name} 
+                    fill 
+                    style={{ objectFit: 'cover' }} 
+                  />
+                </div>
+                <div className={styles.productInfo}>
+                  <span className={styles.categoryLabel}>{product.category}</span>
+                  <h3>{product.name}</h3>
+                  <p className="text-accent">EGP {product.price.toLocaleString()}</p>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p style={{ textAlign: 'center', width: '100%', color: 'var(--secondary-text)' }}>Loading featured collection...</p>
+          )}
         </div>
         <div style={{ textAlign: 'center', marginTop: '3rem' }}>
           <Link href="/shop" className={`${styles.btnSecondary} accent-border text-accent premium-shadow hover-glow`}>
