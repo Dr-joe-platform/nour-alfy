@@ -18,14 +18,14 @@ export async function POST(request: Request) {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
+          user: process.env.SMTP_USER || process.env.EMAIL_USER,
+          pass: process.env.SMTP_PASS || process.env.EMAIL_PASS,
         },
       });
 
       const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: process.env.EMAIL_USER, // Send to the store owner
+        from: process.env.SMTP_USER || process.env.EMAIL_USER,
+        to: process.env.SMTP_USER || process.env.EMAIL_USER, // Send to the store owner
         subject: `New Custom Order Request from ${data.name}`,
         html: `
           <h2>New Custom Design Request</h2>
