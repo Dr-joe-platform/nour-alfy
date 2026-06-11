@@ -66,6 +66,63 @@
   color: var(--primary-accent);
 }
 
+/* Newsletter Section */
+.newsletterSection h3 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+.newsletterSection p {
+  font-size: 0.9rem;
+  color: var(--secondary-text);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.newsletterForm {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.newsletterForm input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.newsletterForm input:focus {
+  outline: none;
+  border-color: var(--primary-accent);
+}
+
+.newsletterForm button {
+  padding: 0 1.2rem;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--primary-accent);
+  color: var(--background);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.newsletterForm button:hover {
+  opacity: 0.9;
+}
+
+.newsletterForm button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .contactList {
   list-style: none;
   padding: 0;

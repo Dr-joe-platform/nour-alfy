@@ -1,8 +1,39 @@
 import Link from 'next/link';
-import { Mail, Phone } from 'lucide-react';
+import { Mail, Phone, Send } from 'lucide-react';
+import { useState } from 'react';
+import { useToast } from './ToastContext';
 import styles from './Footer.module.css';
 
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useToast();
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    
+    setLoading(true);
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      
+      const data = await res.json();
+      if (res.ok) {
+        showToast('Successfully subscribed to our newsletter!');
+        setEmail('');
+      } else {
+        showToast(data.error || 'Failed to subscribe.');
+      }
+    } catch (error) {
+      showToast('An error occurred. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
@@ -22,6 +53,25 @@ export default function Footer() {
             <li><Link href="/privacy" className="hover-glow">Privacy Policy</Link></li>
             <li><Link href="/return-policy" className="hover-glow">Return Policy</Link></li>
           </ul>
+        </div>
+
+        <div className={styles.newsletterSection}>
+          <h3>Join Our Newsletter</h3>
+          <p>Subscribe to receive updates on new collections, exclusive offers, and the latest from NOUR ALFY.</p>
+          <form onSubmit={handleSubscribe} className={styles.newsletterForm}>
+            <input 
+              type="email" 
+              placeholder="Enter your email address" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required 
+              disabled={loading}
+              className="accent-border"
+            />
+            <button type="submit" disabled={loading} className="bg-accent hover-glow" aria-label="Subscribe">
+              {loading ? '...' : <Send size={18} />}
+            </button>
+          </form>
         </div>
 
         <div className={styles.contactSection}>

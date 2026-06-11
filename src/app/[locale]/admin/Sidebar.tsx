@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Package, ShoppingBag, MessageSquare, LayoutDashboard, Sun, Moon } from 'lucide-react';
+import { Package, ShoppingBag, MessageSquare, LayoutDashboard, Sun, Moon, Mail } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 import styles from './Admin.module.css';
 
@@ -45,6 +45,12 @@ export default function AdminSidebar() {
           className={`${styles.navLink} ${isActive('/admin/custom-requests') ? styles.navLinkActive : ''}`}
         >
           <MessageSquare size={20} /> Custom Requests
+        </Link>
+        <Link 
+          href="/admin/newsletter" 
+          className={`${styles.navLink} ${isActive('/admin/newsletter') ? styles.navLinkActive : ''}`}
+        >
+          <Mail size={20} /> Newsletter
         </Link>
         <Link href="/" className={`${styles.navLink} ${styles.backLink}`}>
           &larr; Back to Store
