@@ -31,12 +31,22 @@ export default function Checkout() {
     phone: '',
     address: '',
     apartment: '',
-    city: 'Asyut',
+    city: 'Cairo',
     email: '',
+    billingFirstName: '',
+    billingLastName: '',
+    billingAddress: '',
+    billingApartment: '',
+    billingCity: 'Cairo',
   });
+
+  const [errors, setErrors] = useState<Record<string, boolean>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: false });
+    }
   };
 
   // Static shipping fee as requested
@@ -81,12 +91,36 @@ export default function Checkout() {
 
   const handlePayNow = async () => {
     if (cart.length === 0) return;
-    if (!formData.firstName || !formData.phone || !formData.address) {
-      showToast('الرجاء إدخال جميع البيانات المطلوبة (الاسم، رقم الهاتف، العنوان)');
+    
+    // Validation
+    const newErrors: Record<string, boolean> = {};
+    if (!formData.firstName) newErrors.firstName = true;
+    if (!formData.lastName) newErrors.lastName = true;
+    if (!formData.phone) newErrors.phone = true;
+    if (!formData.address) newErrors.address = true;
+    if (!formData.email) newErrors.email = true;
+    
+    if (billingMethod === 'different') {
+      if (!formData.billingFirstName) newErrors.billingFirstName = true;
+      if (!formData.billingLastName) newErrors.billingLastName = true;
+      if (!formData.billingAddress) newErrors.billingAddress = true;
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      showToast('Please fill in all required fields.');
       return;
     }
     
     setIsSubmitting(true);
+    
+    // If Kashier, simulate redirect (since we don't have API keys yet)
+    if (paymentMethod === 'kashier') {
+      showToast('Redirecting to Kashier Secure Payment...');
+      // Simulated delay for "redirect"
+      await new Promise(resolve => setTimeout(resolve, 1500));
+    }
+
     try {
       const response = await fetch('/api/orders', {
         method: 'POST',
@@ -96,6 +130,10 @@ export default function Checkout() {
           customerEmail: formData.email,
           customerPhone: formData.phone,
           customerAddress: `${formData.address}, ${formData.apartment ? formData.apartment + ', ' : ''}${formData.city}`,
+          billingAddress: billingMethod === 'different' 
+            ? `${formData.billingAddress}, ${formData.billingApartment ? formData.billingApartment + ', ' : ''}${formData.billingCity}` 
+            : 'Same as shipping',
+          paymentMethod: paymentMethod,
           totalAmount: grandTotal,
           discount: discountAmount,
           promoCode: appliedPromo?.code || null,
@@ -204,7 +242,7 @@ export default function Checkout() {
             </div>
             <div className={styles.formGrid}>
               <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" className={styles.inputField} />
+                <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="Email" className={`${styles.inputField} ${errors.email ? styles.inputError : ''}`} />
               </div>
               <div className={`${styles.checkboxRow} ${styles.fullWidth}`}>
                 <input type="checkbox" id="news" defaultChecked />
@@ -227,10 +265,10 @@ export default function Checkout() {
               </div>
               
               <div className={styles.inputGroup}>
-                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First name" required className={styles.inputField} />
+                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First name" className={`${styles.inputField} ${errors.firstName ? styles.inputError : ''}`} />
               </div>
               <div className={styles.inputGroup}>
-                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last name" className={styles.inputField} />
+                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last name" className={`${styles.inputField} ${errors.lastName ? styles.inputError : ''}`} />
               </div>
 
               <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
@@ -238,7 +276,7 @@ export default function Checkout() {
               </div>
               
               <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
-                <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Address" required className={styles.inputField} />
+                <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Address" className={`${styles.inputField} ${errors.address ? styles.inputError : ''}`} />
               </div>
 
               <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
@@ -250,10 +288,9 @@ export default function Checkout() {
               </div>
               <div className={styles.inputGroup}>
                 <select name="city" value={formData.city} onChange={handleChange} className={styles.selectField}>
-                  <option value="Cairo">Cairo</option>
-                  <option value="Alexandria">Alexandria</option>
-                  <option value="Asyut">Asyut</option>
-                  <option value="Giza">Giza</option>
+                  {["Cairo", "Giza", "Alexandria", "Dakahlia", "Red Sea", "Beheira", "Fayoum", "Gharbia", "Ismailia", "Menofia", "Minya", "Qaliubiya", "New Valley", "Suez", "Aswan", "Assiut", "Beni Suef", "Port Said", "Damietta", "Sharkia", "South Sinai", "Kafr Al sheikh", "Matrouh", "Luxor", "Qena", "North Sinai", "Sohag"].map(city => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
                 </select>
               </div>
 
@@ -262,7 +299,7 @@ export default function Checkout() {
               </div>
               
               <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
-                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" required className={styles.inputField} />
+                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone" className={`${styles.inputField} ${errors.phone ? styles.inputError : ''}`} />
               </div>
 
               <div className={`${styles.checkboxRow} ${styles.fullWidth}`}>
@@ -355,6 +392,34 @@ export default function Checkout() {
                 </div>
               </div>
             </div>
+
+            {/* Dynamic Billing Form */}
+            {billingMethod === 'different' && (
+              <div className={styles.formGrid} style={{ marginTop: '1.5rem', padding: '1.5rem', background: 'var(--card-bg)', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                <div className={styles.inputGroup}>
+                  <input type="text" name="billingFirstName" value={formData.billingFirstName} onChange={handleChange} placeholder="First name" className={`${styles.inputField} ${errors.billingFirstName ? styles.inputError : ''}`} />
+                </div>
+                <div className={styles.inputGroup}>
+                  <input type="text" name="billingLastName" value={formData.billingLastName} onChange={handleChange} placeholder="Last name" className={`${styles.inputField} ${errors.billingLastName ? styles.inputError : ''}`} />
+                </div>
+                
+                <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+                  <input type="text" name="billingAddress" value={formData.billingAddress} onChange={handleChange} placeholder="Address" className={`${styles.inputField} ${errors.billingAddress ? styles.inputError : ''}`} />
+                </div>
+
+                <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
+                  <input type="text" name="billingApartment" value={formData.billingApartment} onChange={handleChange} placeholder="Apartment, suite, etc. (optional)" className={styles.inputField} />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <select name="billingCity" value={formData.billingCity} onChange={handleChange} className={styles.selectField}>
+                    {["Cairo", "Giza", "Alexandria", "Dakahlia", "Red Sea", "Beheira", "Fayoum", "Gharbia", "Ismailia", "Menofia", "Minya", "Qaliubiya", "New Valley", "Suez", "Aswan", "Assiut", "Beni Suef", "Port Said", "Damietta", "Sharkia", "South Sinai", "Kafr Al sheikh", "Matrouh", "Luxor", "Qena", "North Sinai", "Sohag"].map(city => (
+                      <option key={city} value={city}>{city}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
           </section>
 
         </div>
@@ -432,7 +497,7 @@ export default function Checkout() {
           </div>
 
           <button className={`${styles.payBtn} bg-accent text-accent hover-glow`} onClick={handlePayNow} disabled={isSubmitting}>
-            {isSubmitting ? 'Processing...' : 'Place Order (Cash on Delivery)'}
+            {isSubmitting ? 'Processing...' : paymentMethod === 'kashier' ? 'Proceed to Payment (Kashier)' : 'Place Order (Cash on Delivery)'}
           </button>
           
         </div>
