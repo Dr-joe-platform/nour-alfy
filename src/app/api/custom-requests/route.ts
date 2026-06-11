@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, addDoc, serverTimestamp, query, orderBy } from 'firebase/firestore';
+import nodemailer from 'nodemailer';
 
 export async function POST(request: Request) {
   try {
@@ -11,6 +12,38 @@ export async function POST(request: Request) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
+    
+    // Send Email Notification
+    try {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: process.env.EMAIL_USER, // Send to the store owner
+        subject: `New Custom Order Request from ${data.name}`,
+        html: `
+          <h2>New Custom Design Request</h2>
+          <p><strong>Name:</strong> ${data.name}</p>
+          <p><strong>Phone:</strong> ${data.phone}</p>
+          <p><strong>Category:</strong> ${data.category}</p>
+          <p><strong>Material:</strong> ${data.material}</p>
+          <p><strong>Dimensions:</strong> ${data.dimensions || 'N/A'}</p>
+          <h3>Design Idea:</h3>
+          <p>${data.idea}</p>
+        `
+      };
+
+      await transporter.sendMail(mailOptions);
+    } catch (emailError) {
+      console.error('Failed to send email notification:', emailError);
+      // We do not fail the request if the email fails, since it is saved in Firebase
+    }
     
     return NextResponse.json({ id: docRef.id, ...data }, { status: 201 });
   } catch (error) {
