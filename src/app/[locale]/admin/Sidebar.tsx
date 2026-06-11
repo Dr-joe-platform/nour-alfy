@@ -64,6 +64,12 @@ export default function AdminSidebar() {
         >
           <Truck size={20} /> Shipping Rates
         </Link>
+        <Link 
+          href="/admin/settings" 
+          className={`${styles.navLink} ${isActive('/admin/settings') ? styles.navLinkActive : ''}`}
+        >
+          <Settings size={20} /> Settings
+        </Link>
         <Link href="/" className={`${styles.navLink} ${styles.backLink}`}>
           &larr; Back to Store
         </Link>
