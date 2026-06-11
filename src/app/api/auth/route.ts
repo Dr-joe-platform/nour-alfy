@@ -1,9 +1,20 @@
 import { NextResponse } from 'next/server';
+import { db } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 export async function POST(request: Request) {
   try {
     const { password } = await request.json();
-    const adminPassword = process.env.ADMIN_PASSWORD || 'nouralfy2026'; // Fallback for local dev if forgotten
+    
+    // Fetch password from Firebase
+    const authDocRef = doc(db, 'settings', 'auth');
+    const authDocSnap = await getDoc(authDocRef);
+    
+    let adminPassword = process.env.ADMIN_PASSWORD || 'nouralfy2026';
+    
+    if (authDocSnap.exists() && authDocSnap.data().password) {
+      adminPassword = authDocSnap.data().password;
+    }
 
     if (password === adminPassword) {
       const response = NextResponse.json({ success: true });
@@ -21,6 +32,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
   } catch (error) {
+    console.error('Login error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
