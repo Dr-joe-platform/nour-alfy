@@ -5,17 +5,21 @@
 
 .container {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: clamp(1rem, 5vw, 2rem);
+  box-sizing: border-box;
 }
 
 .productShowcase {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  padding: 3rem;
+  gap: clamp(1.5rem, 5vw, 3rem);
+  padding: clamp(1rem, 5vw, 3rem);
   border-radius: 12px;
-  margin-bottom: 5rem;
+  margin-bottom: clamp(2rem, 5vw, 5rem);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .imageSection {
@@ -58,10 +62,12 @@
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  padding: 1.5rem;
+  padding: clamp(1rem, 3vw, 1.5rem);
   background: rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   border: 1px solid var(--border-color);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 [data-theme='dark'] .specs {
@@ -111,8 +117,9 @@
 
 .productGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(140px, 100%), 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  width: 100%;
 }
 
 .productCard {
