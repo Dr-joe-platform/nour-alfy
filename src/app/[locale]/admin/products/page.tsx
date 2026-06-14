@@ -111,6 +111,9 @@ export default function AdminProducts() {
     setIsSubmitting(true);
     setUploadProgress('Preparing upload...');
     
+    // Construct FormData synchronously before any await
+    const formData = new FormData(e.currentTarget);
+    
     try {
       const uploadedUrls: string[] = [];
       
@@ -143,7 +146,6 @@ export default function AdminProducts() {
       }
       
       setUploadProgress('Saving product...');
-      const formData = new FormData(e.currentTarget);
       const categoryVal = formData.get('category');
       const customCategoryVal = formData.get('customCategory');
       const finalCategory = categoryVal === 'Other' ? customCategoryVal : categoryVal;
