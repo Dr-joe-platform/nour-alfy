@@ -146,14 +146,14 @@
   }
 
   .productShowcase {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     padding: 1rem;
-    gap: 1rem;
+    gap: 1.5rem;
     margin-bottom: 3rem;
   }
 
   .mainImage {
-    height: 300px;
+    height: 350px;
   }
 
   .detailsSection h1 {
@@ -194,27 +194,14 @@
 
 @media (max-width: 480px) {
   .productShowcase {
-    grid-template-columns: 1fr 1fr;
     padding: 0.5rem;
-    gap: 0.5rem;
+    gap: 1rem;
   }
   .container {
     padding: 0.5rem;
     overflow-x: hidden;
   }
   .mainImage {
-    height: 200px;
-  }
-  .detailsSection h1 {
-    font-size: 1.2rem;
-  }
-  .price {
-    font-size: 1rem;
-  }
-  .description {
-    font-size: 0.85rem;
-  }
-  .specLabel, .specValue {
-    font-size: 0.85rem;
+    height: 250px;
   }
 }

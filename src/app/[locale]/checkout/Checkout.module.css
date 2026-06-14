@@ -312,32 +312,32 @@
 }
 
 @media (max-width: 900px) {
+  .checkoutLayout {
+    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+  }
+  
   .formColumn {
-    padding: 1rem;
+    padding: 1.5rem;
+    border-right: none;
+    order: 2;
   }
   
   .summaryColumn {
-    padding: 1rem;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    order: 1;
     height: auto;
   }
 
   .formGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
-  .checkoutLayout {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
-  
   .formColumn, .summaryColumn {
-    padding: 0.5rem;
-  }
-  
-  .sectionHeader h2 {
-    font-size: 1.1rem;
+    padding: 1rem;
   }
 }
