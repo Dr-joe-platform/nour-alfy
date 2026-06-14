@@ -141,8 +141,40 @@
 }
 
 @media (max-width: 900px) {
+  .container {
+    padding: 1rem;
+  }
+
   .productShowcase {
     grid-template-columns: 1fr;
-    padding: 1.5rem;
+    padding: 1rem;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .mainImage {
+    height: 350px;
+  }
+
+  .detailsSection h1 {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+  }
+
+  .price {
+    font-size: 1.3rem;
+  }
+  
+  .specs {
+    padding: 1rem;
+  }
+
+  .productGrid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  .productImageSm {
+    height: 200px;
   }
 }
