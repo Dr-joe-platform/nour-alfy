@@ -20,6 +20,7 @@ export default function AdminProducts() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>(['']);
   const [editingProduct, setEditingProduct] = useState<any>(null);
+  const [customCategory, setCustomCategory] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -67,6 +68,14 @@ export default function AdminProducts() {
       } catch (e) {}
     }
     setImageUrls(parsedImages);
+    
+    // Check if category is standard
+    const standardCategories = ["All", "Beaded Bags", "Embroidery", "Accessories"];
+    if (product.category && !standardCategories.includes(product.category)) {
+      setCustomCategory(true);
+    } else {
+      setCustomCategory(false);
+    }
   };
 
   const handleAddImageUrl = () => {
@@ -90,10 +99,14 @@ export default function AdminProducts() {
     setIsSubmitting(true);
     
     const formData = new FormData(e.currentTarget);
+    const categoryVal = formData.get('category');
+    const customCategoryVal = formData.get('customCategory');
+    const finalCategory = categoryVal === 'Other' ? customCategoryVal : categoryVal;
+
     const data = {
       name: formData.get('name'),
       price: formData.get('price'),
-      category: formData.get('category'),
+      category: finalCategory,
       description: formData.get('description'),
       leatherType: formData.get('leatherType'),
       dimensions: formData.get('dimensions'),
@@ -186,19 +199,30 @@ export default function AdminProducts() {
               </div>
               <div className={styles.inputGroup}>
                 <label>Category</label>
-                <input 
+                <select 
                   name="category" 
-                  list="category-options"
                   className="accent-border" 
-                  defaultValue={editingProduct?.category || "Accessories"} 
-                  required 
-                  placeholder="Select or type a new category..."
-                />
-                <datalist id="category-options">
-                  <option value="Beaded Bags" />
-                  <option value="Embroidery" />
-                  <option value="Accessories" />
-                </datalist>
+                  defaultValue={customCategory ? "Other" : (editingProduct?.category || "Accessories")} 
+                  required
+                  onChange={(e) => setCustomCategory(e.target.value === 'Other')}
+                >
+                  <option value="Beaded Bags">Beaded Bags</option>
+                  <option value="Embroidery">Embroidery</option>
+                  <option value="Accessories">Accessories</option>
+                  <option value="Other">Other (Add Custom)</option>
+                </select>
+                
+                {customCategory && (
+                  <input 
+                    name="customCategory" 
+                    type="text" 
+                    className="accent-border" 
+                    defaultValue={editingProduct?.category}
+                    placeholder="Type custom category..." 
+                    style={{ marginTop: '0.5rem' }}
+                    required 
+                  />
+                )}
               </div>
               <div className={styles.inputGroup}>
                 <label>Price (EGP)</label>
