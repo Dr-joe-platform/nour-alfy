@@ -111,7 +111,7 @@
   text-align: center;
 }
 
-.productGrid {
+.similarGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 2rem;
@@ -169,12 +169,23 @@
     padding: 1rem;
   }
 
-  .productGrid {
+  .similarGrid {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 1rem;
   }
 
   .productImageSm {
     height: 200px;
+  }
+
+  .specItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .specValue {
+    text-align: left;
+    word-break: break-word;
   }
 }
