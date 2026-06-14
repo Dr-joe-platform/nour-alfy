@@ -162,7 +162,7 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
             <h2 className="text-accent">Customer Reviews</h2>
             <div className={styles.divider}></div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginTop: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', marginTop: '2rem' }}>
             <div className="glass-panel premium-shadow" style={{ padding: '2rem', borderRadius: '8px' }}>
               <div style={{ color: 'var(--primary-gold)', marginBottom: '1rem', letterSpacing: '2px' }}>★★★★★</div>
               <p style={{ color: 'var(--secondary-text)', fontStyle: 'italic', marginBottom: '1rem', lineHeight: '1.6' }}>

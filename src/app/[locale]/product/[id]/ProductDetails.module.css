@@ -170,7 +170,7 @@
   }
 
   .similarGrid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 1rem;
   }
 
@@ -187,5 +187,21 @@
   .specValue {
     text-align: left;
     word-break: break-word;
+    overflow-wrap: anywhere;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .productShowcase {
+    padding: 0.5rem;
+    gap: 1rem;
+  }
+  .container {
+    padding: 0.5rem;
+    overflow-x: hidden;
+  }
+  .mainImage {
+    height: 300px;
   }
 }
