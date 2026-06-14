@@ -58,7 +58,7 @@ export default async function AdminDashboard() {
           <h1 className="text-accent" style={{ fontWeight: 300, fontSize: '2.8rem', marginBottom: '0.5rem', letterSpacing: '2px' }}>Dashboard Overview</h1>
           <p style={{ color: 'var(--secondary-text)', fontSize: '1.1rem' }}>Welcome to your command center. Here's what's happening today.</p>
         </div>
-        <Link href="/admin/products/new" className={`${styles.actionBtn} bg-accent hover-glow premium-shadow`}>
+        <Link href="/admin/products?add=true" className={`${styles.actionBtn} bg-accent hover-glow premium-shadow`}>
           <Plus size={20} /> Quick Add Product
         </Link>
       </div>

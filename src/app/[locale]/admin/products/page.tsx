@@ -23,6 +23,12 @@ export default function AdminProducts() {
 
   useEffect(() => {
     fetchProducts();
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('add') === 'true') {
+        setShowAddForm(true);
+      }
+    }
   }, []);
 
   const fetchProducts = async () => {
