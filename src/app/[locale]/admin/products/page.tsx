@@ -19,8 +19,10 @@ export default function AdminProducts() {
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>(['']);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [customCategory, setCustomCategory] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<string>('');
 
   useEffect(() => {
     fetchProducts();
@@ -52,11 +54,15 @@ export default function AdminProducts() {
   const handleAddNewClick = () => {
     setEditingProduct(null);
     setImageUrls(['']);
+    setSelectedFiles([]);
+    setUploadProgress('');
     setShowAddForm(!showAddForm);
   };
 
   const handleEditClick = (product: any) => {
     setEditingProduct(product);
+    setSelectedFiles([]);
+    setUploadProgress('');
     setShowAddForm(true);
     let parsedImages = [''];
     if (product.images) {
@@ -94,27 +100,66 @@ export default function AdminProducts() {
     setImageUrls(newUrls);
   };
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setSelectedFiles(Array.from(e.target.files));
+    }
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    const formData = new FormData(e.currentTarget);
-    const categoryVal = formData.get('category');
-    const customCategoryVal = formData.get('customCategory');
-    const finalCategory = categoryVal === 'Other' ? customCategoryVal : categoryVal;
-
-    const data = {
-      name: formData.get('name'),
-      price: formData.get('price'),
-      category: finalCategory,
-      description: formData.get('description'),
-      leatherType: formData.get('leatherType'),
-      dimensions: formData.get('dimensions'),
-      colors: formData.get('colors'),
-      images: imageUrls.filter(url => url.trim() !== ''),
-    };
+    setUploadProgress('Preparing upload...');
     
     try {
+      const uploadedUrls: string[] = [];
+      
+      // Upload files to ImgBB
+      if (selectedFiles.length > 0) {
+        const apiKey = "f616121a0de030c874e31d14666bb9c2";
+        if (!apiKey) {
+          throw new Error('Missing ImgBB API Key! Please add NEXT_PUBLIC_IMGBB_API_KEY to your .env file.');
+        }
+
+        for (let i = 0; i < selectedFiles.length; i++) {
+          const file = selectedFiles[i];
+          setUploadProgress(`Uploading image ${i + 1} of ${selectedFiles.length}...`);
+          
+          const formDataImg = new FormData();
+          formDataImg.append('image', file);
+          
+          const uploadRes = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+            method: 'POST',
+            body: formDataImg,
+          });
+          
+          const uploadData = await uploadRes.json();
+          if (uploadData.success) {
+            uploadedUrls.push(uploadData.data.url);
+          } else {
+            throw new Error(uploadData.error?.message || 'Failed to upload image to ImgBB');
+          }
+        }
+      }
+      
+      setUploadProgress('Saving product...');
+      const formData = new FormData(e.currentTarget);
+      const categoryVal = formData.get('category');
+      const customCategoryVal = formData.get('customCategory');
+      const finalCategory = categoryVal === 'Other' ? customCategoryVal : categoryVal;
+
+      const allImages = [...imageUrls.filter(url => url.trim() !== ''), ...uploadedUrls];
+
+      const data = {
+        name: formData.get('name'),
+        price: formData.get('price'),
+        category: finalCategory,
+        description: formData.get('description'),
+        leatherType: formData.get('leatherType'),
+        dimensions: formData.get('dimensions'),
+        colors: formData.get('colors'),
+        images: allImages,
+      };
       const method = editingProduct ? 'PUT' : 'POST';
       const url = editingProduct ? `/api/products/${editingProduct.id}` : '/api/products';
       
@@ -129,18 +174,22 @@ export default function AdminProducts() {
       if (res.ok) {
         setShowAddForm(false);
         setImageUrls(['']);
+        setSelectedFiles([]);
+        setUploadProgress('');
         setEditingProduct(null);
         fetchProducts();
         showToast(editingProduct ? 'Product updated successfully!' : 'Product added successfully!');
       } else {
-        const resData = await res.json();
-        showToast(resData.error || 'Failed to add product');
+        const errorData = await res.json();
+        showToast(errorData.error || 'Failed to save product. Please try again.');
+        setIsSubmitting(false);
+        setUploadProgress('');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving product:', error);
-      showToast('An error occurred while saving the product.');
-    } finally {
+      showToast(error.message || 'An error occurred. Please try again.');
       setIsSubmitting(false);
+      setUploadProgress('');
     }
   };
 
@@ -252,8 +301,27 @@ export default function AdminProducts() {
               </div>
             </div>
 
-            <h3 style={{ marginTop: '1rem', color: 'var(--primary-accent)', fontWeight: 400 }}>Product Images (URLs)</h3>
-            <div className={styles.inputGroup}>
+            <h3 style={{ marginTop: '1rem', color: 'var(--primary-accent)', fontWeight: 400 }}>Product Images</h3>
+            
+            <div className={styles.inputGroup} style={{ background: 'rgba(212, 175, 55, 0.05)', padding: '1.5rem', borderRadius: '8px', border: '1px dashed var(--primary-accent)' }}>
+              <label>Upload Images (via ImgBB)</label>
+              <input 
+                type="file" 
+                multiple 
+                accept="image/*" 
+                onChange={handleFileSelect} 
+                className="accent-border"
+                style={{ background: 'transparent', padding: '0.5rem 0' }}
+              />
+              {selectedFiles.length > 0 && (
+                <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: 'var(--primary-accent)' }}>
+                  {selectedFiles.length} file(s) selected
+                </p>
+              )}
+            </div>
+
+            <div className={styles.inputGroup} style={{ marginTop: '1.5rem' }}>
+              <label>Or provide External Image URLs (Optional)</label>
               {imageUrls.map((url, index) => (
                 <div key={index} style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
                   <input 
@@ -267,11 +335,11 @@ export default function AdminProducts() {
                   <button type="button" onClick={() => handleRemoveImageUrl(index)} style={{ padding: '0 1rem', background: '#333', color: 'white', borderRadius: '4px' }}>X</button>
                 </div>
               ))}
-              <button type="button" onClick={handleAddImageUrl} style={{ alignSelf: 'flex-start', padding: '0.5rem 1rem', background: 'var(--primary-gold)', color: '#000', borderRadius: '4px', cursor: 'pointer' }}>+ Add Another Image URL</button>
+              <button type="button" onClick={handleAddImageUrl} style={{ alignSelf: 'flex-start', padding: '0.5rem 1rem', background: 'transparent', color: 'var(--primary-accent)', border: '1px solid var(--primary-accent)', borderRadius: '4px', cursor: 'pointer' }}>+ Add External URL</button>
             </div>
 
             <button type="submit" disabled={isSubmitting} className={`bg-accent text-accent hover-glow ${styles.submitBtn}`} style={{ marginTop: '2rem' }}>
-              {isSubmitting ? 'Saving...' : 'Save Product'}
+              {isSubmitting ? uploadProgress || 'Saving...' : 'Save Product'}
             </button>
           </form>
         </div>
