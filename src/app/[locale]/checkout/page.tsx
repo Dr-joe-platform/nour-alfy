@@ -12,7 +12,7 @@ import styles from './Checkout.module.css';
 export default function Checkout() {
   const router = useRouter();
   const { showToast } = useToast();
-  const { cart, cartTotal, clearCart } = useCart();
+  const { cart, cartTotal, clearCart, removeFromCart } = useCart();
   const [billingMethod, setBillingMethod] = useState('same');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successOrderId, setSuccessOrderId] = useState<string | null>(null);
@@ -436,6 +436,12 @@ export default function Checkout() {
                 </div>
                 <div className={styles.itemDetails}>
                   <h4>{item.name}</h4>
+                  <button 
+                    onClick={() => removeFromCart(item.id)} 
+                    style={{ background: 'none', border: 'none', color: '#ff4757', cursor: 'pointer', fontSize: '0.8rem', padding: 0, textDecoration: 'underline' }}
+                  >
+                    Remove
+                  </button>
                 </div>
                 <div className={styles.itemPrice}>
                   EGP {((typeof item.price === 'string' ? parseInt(item.price.replace(/,/g, '')) : item.price) * item.quantity).toLocaleString()}
