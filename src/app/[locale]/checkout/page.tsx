@@ -283,9 +283,6 @@ export default function Checkout() {
                 <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last name" className={`${styles.inputField} ${errors.lastName ? styles.inputError : ''}`} />
               </div>
 
-              <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
-                <input type="text" placeholder="Company (optional)" className={styles.inputField} />
-              </div>
               
               <div className={`${styles.inputGroup} ${styles.fullWidth}`}>
                 <input type="text" name="address" value={formData.address} onChange={handleChange} placeholder="Address" className={`${styles.inputField} ${errors.address ? styles.inputError : ''}`} />
