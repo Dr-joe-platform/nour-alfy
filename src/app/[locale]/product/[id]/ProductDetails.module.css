@@ -26,7 +26,9 @@
 .mainImage {
   position: relative;
   width: 100%;
+  height: 500px;
   border-radius: 8px;
+  overflow: hidden;
   background-color: var(--border-color);
 }
 
@@ -109,7 +111,7 @@
   text-align: center;
 }
 
-.similarGrid {
+.productGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 2rem;
@@ -139,60 +141,8 @@
 }
 
 @media (max-width: 900px) {
-  .container {
-    padding: 1rem;
-  }
-
   .productShowcase {
     grid-template-columns: 1fr;
-    padding: 1rem;
-    gap: 1.5rem;
-    margin-bottom: 3rem;
-  }
-
-  .detailsSection h1 {
-    font-size: 1.8rem;
-    letter-spacing: 1px;
-  }
-
-  .price {
-    font-size: 1.3rem;
-  }
-  
-  .specs {
-    padding: 1rem;
-  }
-
-  .similarGrid {
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 1rem;
-  }
-
-  .productImageSm {
-    height: 200px;
-  }
-
-  .specItem {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .specValue {
-    text-align: left;
-    word-break: break-word;
-    overflow-wrap: anywhere;
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .productShowcase {
-    padding: 0.5rem;
-    gap: 1rem;
-  }
-  .container {
-    padding: 0.5rem;
-    overflow-x: hidden;
+    padding: 1.5rem;
   }
 }
