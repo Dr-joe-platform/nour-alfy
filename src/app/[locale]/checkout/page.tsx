@@ -413,6 +413,15 @@ export default function Checkout() {
             )}
           </section>
 
+          <button 
+            className={`${styles.payBtn} bg-accent text-accent hover-glow`} 
+            onClick={handlePayNow} 
+            disabled={isSubmitting}
+            style={{ marginTop: '2rem', width: '100%' }}
+          >
+            {isSubmitting ? 'Processing...' : 'Place Order (Cash on Delivery)'}
+          </button>
+
         </div>
 
         {/* Right Column - Order Summary */}
@@ -486,10 +495,6 @@ export default function Checkout() {
               </div>
             </div>
           </div>
-
-          <button className={`${styles.payBtn} bg-accent text-accent hover-glow`} onClick={handlePayNow} disabled={isSubmitting}>
-            {isSubmitting ? 'Processing...' : 'Place Order (Cash on Delivery)'}
-          </button>
           
         </div>
 
