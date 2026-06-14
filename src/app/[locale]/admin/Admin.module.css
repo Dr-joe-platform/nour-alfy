@@ -84,7 +84,6 @@
 .mainContent {
   flex: 1;
   padding: 3rem;
-  padding-top: 4rem;
   overflow-y: auto;
 }
 
@@ -96,50 +95,17 @@
   .sidebar {
     width: 100%;
     height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  .sidebarHeader {
-    padding: 1.5rem;
-    text-align: center;
   }
   
   .sidebarNav {
     padding: 1rem;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
+    overflow-x: auto;
   }
   
   .navLink {
-    padding: 0.8rem 1.2rem;
-    font-size: 0.85rem;
-    border-left: none;
-    border-bottom: 3px solid transparent;
-    border-radius: 8px;
-    background: rgba(0,0,0,0.02);
-  }
-
-  [data-theme='dark'] .navLink {
-    background: rgba(255,255,255,0.02);
-  }
-
-  .navLinkActive {
-    border-bottom-color: var(--primary-accent);
-    background: var(--accent-glow);
-  }
-
-  .navLink:hover {
-    padding-left: 1.2rem;
-    border-bottom-color: var(--primary-accent);
-    transform: translateY(-2px);
-  }
-
-  .mainContent {
-    padding: 1.5rem;
-    padding-top: 4rem;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
   }
 }
 
