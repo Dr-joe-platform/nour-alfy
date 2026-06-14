@@ -186,12 +186,19 @@ export default function AdminProducts() {
               </div>
               <div className={styles.inputGroup}>
                 <label>Category</label>
-                <select name="category" className="accent-border" defaultValue={editingProduct?.category || "Accessories"} required>
-                  <option value="All">All</option>
-                  <option value="Beaded Bags">Beaded Bags</option>
-                  <option value="Embroidery">Embroidery</option>
-                  <option value="Accessories">Accessories</option>
-                </select>
+                <input 
+                  name="category" 
+                  list="category-options"
+                  className="accent-border" 
+                  defaultValue={editingProduct?.category || "Accessories"} 
+                  required 
+                  placeholder="Select or type a new category..."
+                />
+                <datalist id="category-options">
+                  <option value="Beaded Bags" />
+                  <option value="Embroidery" />
+                  <option value="Accessories" />
+                </datalist>
               </div>
               <div className={styles.inputGroup}>
                 <label>Price (EGP)</label>
