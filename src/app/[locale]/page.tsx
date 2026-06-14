@@ -57,8 +57,7 @@ export default function Home() {
         <div className={styles.heroOverlay}></div>
         <div className={styles.heroContent}>
           <div className={`${styles.logoContainer} ${step === 0 ? styles.logoLarge : styles.logoNormal}`}>
-            <img src="/products/logo-splash.png" alt="NOUR ALFY Logo" style={{ width: '150px', height: 'auto' }} className={`site-logo logo-light ${styles.heroLogo}`} />
-            <img src="/products/logo-dark.png" alt="NOUR ALFY Logo" style={{ width: '150px', height: 'auto' }} className={`site-logo logo-dark ${styles.heroLogo}`} />
+            <img src="/products/logo-splash.png" alt="NOUR ALFY Logo" style={{ width: '150px', height: 'auto' }} className={`site-logo logo-blend ${styles.heroLogo}`} />
           </div>
           <h1 className={`text-accent ${styles.staggerItem} ${step >= 3 ? styles.visibleItem : styles.hiddenItem}`}>NOUR ALFY</h1>
           <div className={`${styles.scriptText} ${styles.heroSubtitle} ${step >= 4 ? styles.visibleItem : styles.hiddenItem}`}>

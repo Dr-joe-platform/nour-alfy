@@ -14,8 +14,8 @@ export default function WhatsAppWidget() {
     setMounted(true);
   }, []);
 
-  // Hide in Admin Panel
-  if (mounted && pathname?.includes('/admin')) {
+  // Hide in Admin Panel and Login
+  if (mounted && (pathname?.includes('/admin') || pathname?.includes('/login'))) {
     return null;
   }
 

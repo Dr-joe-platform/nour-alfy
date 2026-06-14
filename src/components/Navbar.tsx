@@ -58,8 +58,7 @@ export default function Navbar() {
       <div className={styles.navContainer}>
         <div className={styles.logo}>
           <Link href="/">
-            <img src="/products/logo-light.png" alt="NOUR ALFY Logo" width="80" style={{ height: 'auto', borderRadius: '50%' }} className="site-logo logo-light" />
-            <img src="/products/logo-dark.png" alt="NOUR ALFY Logo" width="80" style={{ height: 'auto', borderRadius: '50%' }} className="site-logo logo-dark" />
+            <img src="/products/logo-splash.png" alt="NOUR ALFY Logo" width="80" style={{ height: 'auto', borderRadius: '50%' }} className="site-logo logo-blend" />
           </Link>
         </div>
 

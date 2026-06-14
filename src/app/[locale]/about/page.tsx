@@ -29,14 +29,14 @@ export default function About() {
               Every bag, wallet, and fragrance in our collection is a testament to Egyptian heritage blended with modern sophistication. Our master artisans bring decades of experience to the cutting table, ensuring that every stitch is perfect and every scent note is harmonious.
             </p>
           </div>
-          <div className={`${styles.imagePlaceholder} glass-panel premium-shadow`} style={{ position: 'relative', overflow: 'hidden' }}>
-            <Image src="/products/logo-light.png" alt="NOUR ALFY Light" fill style={{ objectFit: 'cover' }} />
+          <div className={`${styles.imagePlaceholder} glass-panel premium-shadow hover-glow`} style={{ position: 'relative', overflow: 'hidden', borderRadius: '12px' }}>
+            <Image src="/products/art1-new.jpeg" alt="Leather Craftsmanship" fill style={{ objectFit: 'cover' }} />
           </div>
         </section>
 
         <section className={styles.craftSection}>
-          <div className={`${styles.imagePlaceholder} glass-panel premium-shadow`} style={{ position: 'relative', overflow: 'hidden', background: '#1a1a1a' }}>
-            <Image src="/products/logo-dark.png" alt="NOUR ALFY Dark" fill style={{ objectFit: 'cover' }} />
+          <div className={`${styles.imagePlaceholder} glass-panel premium-shadow hover-glow`} style={{ position: 'relative', overflow: 'hidden', borderRadius: '12px' }}>
+            <Image src="/products/art2-new.jpeg" alt="Beadwork Details" fill style={{ objectFit: 'cover' }} />
           </div>
           <div className={styles.textContent}>
             <h2 className="text-accent">Uncompromising Quality</h2>
