@@ -144,3 +144,27 @@
     padding: 1.5rem;
   }
 }
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+    overflow-x: hidden;
+  }
+  .productShowcase {
+    padding: 1rem;
+    gap: 1.5rem;
+  }
+  .productGrid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+  .specs {
+    padding: 1rem;
+  }
+  .specValue {
+    word-break: break-all;
+  }
+  .productImageSm {
+    height: 180px;
+  }
+}
