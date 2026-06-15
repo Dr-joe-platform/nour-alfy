@@ -148,7 +148,13 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
                   <Link href={`/product/${relProd.id}`} key={relProd.id}>
                     <div className={`${styles.productCard} glass-panel premium-shadow hover-glow animate-fade-in`} style={{ animationDelay: `${(index + 1) * 0.1}s`, position: 'relative' }}>
                       <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 10 }}>
-                        <WishlistBtn product={{...relProd, img: relImg}} />
+                        <WishlistBtn product={{
+                          id: relProd.id,
+                          name: relProd.name,
+                          price: relProd.price,
+                          category: relProd.category,
+                          img: relImg
+                        }} />
                       </div>
                       <div className={styles.productImageSm}>
                         <img src={relImg} alt={relProd.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
