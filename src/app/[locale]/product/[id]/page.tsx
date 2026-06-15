@@ -91,7 +91,7 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
                 <span className={styles.specValue}>{product.category}</span>
               </div>
               <div className={styles.specItem}>
-                <span className={styles.specLabel}>Leather Type:</span>
+                <span className={styles.specLabel}>Material:</span>
                 <span className={styles.specValue}>{product.leatherType || 'N/A'}</span>
               </div>
               <div className={styles.specItem}>

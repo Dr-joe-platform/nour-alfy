@@ -311,8 +311,8 @@ export default function AdminProducts() {
             
             <div className={styles.formGrid}>
               <div className={styles.inputGroup}>
-                <label>Leather Type / Material</label>
-                <input name="leatherType" type="text" defaultValue={editingProduct?.leatherType} placeholder="e.g. Full-Grain Italian Leather" className="accent-border" />
+                <label>Material</label>
+                <input name="leatherType" type="text" defaultValue={editingProduct?.leatherType} placeholder="e.g. Leather, Pearls, Fabric" className="accent-border" />
               </div>
               <div className={styles.inputGroup}>
                 <label>Dimensions</label>
