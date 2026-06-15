@@ -5,7 +5,7 @@ import {routing} from './i18n/routing';
 
 const intlMiddleware = createMiddleware(routing);
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const token = request.cookies.get('admin_token')?.value;
 
   // Protect /admin routes
