@@ -6,9 +6,6 @@ const withNextIntl = createNextIntlPlugin();
 // @ts-ignore
 const nextConfig = {
   serverExternalPackages: ['@prisma/client'],
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
