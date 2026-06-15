@@ -24,18 +24,19 @@ export default function CareGuideModal({ isOpen, onClose }: CareGuideModalProps)
     <div style={{
       position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
       backgroundColor: 'rgba(0,0,0,0.7)',
-      display: 'flex',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
       zIndex: 1000,
       backdropFilter: 'blur(5px)',
       padding: '20px',
-      overflowY: 'auto',
-      WebkitOverflowScrolling: 'touch'
+      boxSizing: 'border-box'
     }}>
       <div 
         style={{
-          margin: 'auto',
           backgroundColor: '#fdfbf7',
           width: '100%', maxWidth: '600px',
+          maxHeight: '100%',
+          display: 'flex',
+          flexDirection: 'column',
           borderRadius: '12px',
           boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
           position: 'relative',
@@ -49,13 +50,19 @@ export default function CareGuideModal({ isOpen, onClose }: CareGuideModalProps)
             position: 'absolute', top: '15px', right: '15px',
             background: 'none', border: 'none', cursor: 'pointer',
             color: 'var(--secondary-text)',
-            padding: '5px'
+            padding: '5px',
+            zIndex: 10
           }}
         >
           <X size={24} />
         </button>
 
-        <div style={{ padding: '40px 30px' }}>
+        <div style={{ 
+          padding: '40px 30px', 
+          overflowY: 'auto', 
+          WebkitOverflowScrolling: 'touch',
+          flex: 1 
+        }}>
           <div style={{ textAlign: 'center', marginBottom: '30px' }}>
             <Sparkles size={32} color="var(--primary-gold)" style={{ marginBottom: '10px' }} />
             <h2 style={{ fontFamily: 'Georgia, serif', color: 'var(--primary-accent)', fontSize: '2rem', margin: 0 }}>Product Care Guide</h2>

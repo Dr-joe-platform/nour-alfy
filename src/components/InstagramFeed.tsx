@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
+import Script from 'next/script';
 
 const InstagramIcon = ({ size = 24, color = "currentColor" }) => (
   <svg 
@@ -21,14 +21,6 @@ const InstagramIcon = ({ size = 24, color = "currentColor" }) => (
 
 const INSTAGRAM_LINK = "https://www.instagram.com/nour_alfy_handmade_store?igsh=MTQxa3RqMG0wOTI2NQ%3D%3D";
 
-const mockPosts = [
-  { id: 1, img: '/products/bag1.jpeg' },
-  { id: 2, img: '/products/bag2.jpeg' },
-  { id: 3, img: '/products/bag3.jpeg' },
-  { id: 4, img: '/products/wallet1.jpeg' },
-  { id: 5, img: '/products/bag1.jpeg' },
-];
-
 export default function InstagramFeed() {
   return (
     <section style={{ padding: '4rem 5%', backgroundColor: 'var(--bg-dark)', textAlign: 'center' }}>
@@ -41,63 +33,25 @@ export default function InstagramFeed() {
           className="hover-glow"
         >
           <InstagramIcon size={32} />
-          <h2 style={{ margin: 0, fontSize: '2rem', fontWeight: 300, letterSpacing: '2px' }}>Follow Us @nouralfy</h2>
+          <h2 style={{ margin: 0, fontSize: '2rem', fontWeight: 300, letterSpacing: '2px' }}>Follow Us @nour_alfy_handmade_store</h2>
         </a>
         <p style={{ color: 'var(--secondary-text)', marginTop: '10px' }}>Join our community for the latest handcrafted designs.</p>
       </div>
 
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-        gap: '15px',
-        maxWidth: '1200px',
-        margin: '0 auto'
-      }}>
-        {mockPosts.map((post) => (
-          <a 
-            key={post.id} 
-            href={INSTAGRAM_LINK} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{ 
-              position: 'relative', 
-              aspectRatio: '1 / 1', 
-              overflow: 'hidden', 
-              borderRadius: '8px',
-              display: 'block'
-            }}
-            className="instagram-post"
-          >
-            <Image 
-              src={post.img} 
-              alt="Instagram Post" 
-              fill 
-              style={{ objectFit: 'cover', transition: 'transform 0.5s ease' }} 
-            />
-            <div className="instagram-overlay" style={{
-              position: 'absolute',
-              top: 0, left: 0, right: 0, bottom: 0,
-              backgroundColor: 'rgba(0,0,0,0.4)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              opacity: 0,
-              transition: 'opacity 0.3s ease'
-            }}>
-              <InstagramIcon size={32} color="#fff" />
-            </div>
-          </a>
-        ))}
+      <div style={{ maxWidth: '1200px', margin: '0 auto', minHeight: '300px' }}>
+        <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
+        <div className="elfsight-app-79732767-1095-47c7-adba-36f0c037e003" data-elfsight-app-lazy></div>
       </div>
-      
+
       <style>{`
-        .instagram-post:hover img {
-          transform: scale(1.1);
-        }
-        .instagram-post:hover .instagram-overlay {
-          opacity: 1 !important;
+        /* Hide Elfsight Free Badge */
+        .elfsight-app-79732767-1095-47c7-adba-36f0c037e003 a[href*="elfsight"] {
+          display: none !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
         }
       `}</style>
     </section>
   );
 }
+
