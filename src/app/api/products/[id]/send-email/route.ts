@@ -43,7 +43,21 @@ export async function POST(
       // Ignore
     }
     const firstImage = Array.isArray(images) && images.length > 0 ? images[0] : null;
-    const baseUrl = request.headers.get('origin') || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const host = request.headers.get('host') || request.headers.get('x-forwarded-host');
+    const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+    
+    // Resolve base URL in this order:
+    // 1. Explicit NEXT_PUBLIC_BASE_URL env var
+    // 2. Vercel Production URL
+    // 3. Vercel deployment URL
+    // 4. Request Origin header
+    // 5. Request Host header
+    // 6. Fallback to localhost
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
+                    (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : '') ||
+                    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '') ||
+                    request.headers.get('origin') || 
+                    (host ? `${protocol}://${host}` : 'http://localhost:3000');
 
     // 4. Send Email
     await sendNewProductEmail(
