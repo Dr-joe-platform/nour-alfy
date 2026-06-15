@@ -29,11 +29,11 @@ export default function InstagramFeed() {
           href={INSTAGRAM_LINK} 
           target="_blank" 
           rel="noopener noreferrer"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', color: 'var(--primary-gold)', textDecoration: 'none', transition: 'opacity 0.3s' }}
+          style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: '10px', color: 'var(--primary-gold)', textDecoration: 'none', transition: 'opacity 0.3s' }}
           className="hover-glow"
         >
           <InstagramIcon size={32} />
-          <h2 style={{ margin: 0, fontSize: '2rem', fontWeight: 300, letterSpacing: '2px' }}>Follow Us @nour_alfy_handmade_store</h2>
+          <h2 style={{ margin: 0, fontSize: 'clamp(1.2rem, 5vw, 2rem)', fontWeight: 300, letterSpacing: '1px', wordBreak: 'break-word' }}>Follow Us @nour_alfy_handmade_store</h2>
         </a>
         <p style={{ color: 'var(--secondary-text)', marginTop: '10px' }}>Join our community for the latest handcrafted designs.</p>
       </div>
