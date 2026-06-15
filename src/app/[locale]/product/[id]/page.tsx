@@ -8,6 +8,7 @@ import AddToCartBtn from '@/components/AddToCartBtn';
 import ProductGallery from '@/components/ProductGallery';
 import WishlistBtn from '@/components/WishlistBtn';
 import WhatsAppOrderBtn from '@/components/WhatsAppOrderBtn';
+import CareGuideBtn from '@/components/CareGuideBtn';
 import styles from './ProductDetails.module.css';
 
 type Props = {
@@ -118,7 +119,17 @@ export default async function ProductDetails({ params }: Props) {
           
           <div className={styles.detailsSection}>
             <h1 className="text-accent">{product.name}</h1>
-            <p className={`${styles.price} text-accent`}>EGP {product.price.toLocaleString()}</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <p className={`${styles.price} text-accent`}>EGP {product.price.toLocaleString()}</p>
+              {product.stock !== undefined && product.stock <= 0 && (
+                <span style={{ 
+                  backgroundColor: 'red', color: 'white', padding: '4px 10px', 
+                  borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold', letterSpacing: '1px' 
+                }}>
+                  SOLD OUT
+                </span>
+              )}
+            </div>
             
             <p className={styles.description}>{product.description}</p>
             
@@ -141,26 +152,36 @@ export default async function ProductDetails({ params }: Props) {
               </div>
             </div>
 
+            <CareGuideBtn />
+
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '1rem', flexWrap: 'wrap' }}>
-              <AddToCartBtn 
-                product={{
-                  id: product.id,
-                  name: product.name,
-                  price: product.price,
-                  img: mainImage
-                }} 
-                className={`${styles.addToCartBtn} bg-accent hover-glow`} 
-                style={{ flex: 1 }}
-              />
-              <WhatsAppOrderBtn 
-                product={{
-                  id: product.id,
-                  name: product.name,
-                  price: product.price,
-                }}
-                className={styles.whatsAppBtn}
-                style={{ flex: 1 }}
-              />
+              {(product.stock === undefined || product.stock > 0) ? (
+                <>
+                  <AddToCartBtn 
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      img: mainImage
+                    }} 
+                    className={`${styles.addToCartBtn} bg-accent hover-glow`} 
+                    style={{ flex: 1 }}
+                  />
+                  <WhatsAppOrderBtn 
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                    }}
+                    className={styles.whatsAppBtn}
+                    style={{ flex: 1 }}
+                  />
+                </>
+              ) : (
+                <div style={{ flex: 2, padding: '1.2rem', textAlign: 'center', backgroundColor: 'rgba(255,0,0,0.1)', color: 'red', border: '1px solid red', borderRadius: '4px', fontWeight: 'bold', letterSpacing: '2px' }}>
+                  CURRENTLY OUT OF STOCK
+                </div>
+              )}
               <WishlistBtn 
                 product={{
                   id: product.id,

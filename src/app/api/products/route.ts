@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   try {
     const data = await request.json();
     
-    const { name, price, category, description, leatherType, dimensions, colors, images } = data;
+    const { name, price, category, description, leatherType, dimensions, colors, images, stock } = data;
 
     if (!name || isNaN(parseFloat(price))) {
       return NextResponse.json({ error: 'Name and valid price are required' }, { status: 400 });
@@ -42,7 +42,8 @@ export async function POST(request: Request) {
       dimensions: dimensions || null,
       colors: colors || null,
       images: images && images.length > 0 ? JSON.stringify(images) : null,
-      inStock: true,
+      stock: stock !== undefined ? parseInt(stock) : 1,
+      inStock: stock !== undefined ? parseInt(stock) > 0 : true,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });

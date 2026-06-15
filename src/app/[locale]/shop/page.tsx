@@ -17,6 +17,7 @@ interface Product {
   price: number;
   category: string;
   images: string | null;
+  stock?: number;
 }
 
 export default function Shop() {
@@ -186,6 +187,15 @@ export default function Shop() {
                       <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 10 }}>
                         <WishlistBtn product={{...product, img: getFirstImage(product.images)}} />
                       </div>
+                      {product.stock !== undefined && product.stock <= 0 && (
+                        <div style={{
+                          position: 'absolute', top: '10px', left: '10px', zIndex: 10,
+                          backgroundColor: 'rgba(0,0,0,0.8)', color: '#fff', padding: '4px 10px',
+                          borderRadius: '4px', fontSize: '0.8rem', fontWeight: 'bold', letterSpacing: '1px'
+                        }}>
+                          SOLD OUT
+                        </div>
+                      )}
                     </div>
                     <div className={styles.productInfo}>
                       <span className={styles.productCategory}>{product.category}</span>
@@ -194,10 +204,16 @@ export default function Shop() {
                     </div>
                   </Link>
                   <div className={styles.cardActions}>
-                    <AddToCartBtn 
-                      product={{...product, img: getFirstImage(product.images)}} 
-                      className={`${styles.addToCart} bg-accent text-accent hover-glow`} 
-                    />
+                    {(product.stock === undefined || product.stock > 0) ? (
+                      <AddToCartBtn 
+                        product={{...product, img: getFirstImage(product.images)}} 
+                        className={`${styles.addToCart} bg-accent text-accent hover-glow`} 
+                      />
+                    ) : (
+                      <button disabled className={`${styles.addToCart} bg-accent`} style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                        Out of Stock
+                      </button>
+                    )}
                   </div>
                 </div>
               ))

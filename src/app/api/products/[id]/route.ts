@@ -20,7 +20,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const { id } = await params;
     const data = await request.json();
     
-    const { name, price, category, description, leatherType, dimensions, colors, images } = data;
+    const { name, price, category, description, leatherType, dimensions, colors, images, stock } = data;
 
     if (!name || isNaN(parseFloat(price))) {
       return NextResponse.json({ error: 'Name and valid price are required' }, { status: 400 });
@@ -36,6 +36,8 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
       dimensions: dimensions || null,
       colors: colors || null,
       images: images && images.length > 0 ? JSON.stringify(images) : null,
+      stock: stock !== undefined ? parseInt(stock) : 1,
+      inStock: stock !== undefined ? parseInt(stock) > 0 : true,
       updatedAt: serverTimestamp()
     });
 

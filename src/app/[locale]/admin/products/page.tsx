@@ -9,7 +9,7 @@ interface Product {
   name: string;
   price: number;
   images: string | null;
-  inStock: boolean;
+  stock: number;
 }
 
 export default function AdminProducts() {
@@ -160,6 +160,7 @@ export default function AdminProducts() {
         leatherType: formData.get('leatherType'),
         dimensions: formData.get('dimensions'),
         colors: formData.get('colors'),
+        stock: parseInt(formData.get('stock') as string) || 0,
         images: allImages,
       };
       const method = editingProduct ? 'PUT' : 'POST';
@@ -300,6 +301,10 @@ export default function AdminProducts() {
                 <label>Price (EGP)</label>
                 <input name="price" type="number" defaultValue={editingProduct?.price} placeholder="e.g. 1500" required className="accent-border" />
               </div>
+              <div className={styles.inputGroup}>
+                <label>Stock Quantity</label>
+                <input name="stock" type="number" defaultValue={editingProduct?.stock !== undefined ? editingProduct?.stock : 1} placeholder="e.g. 5" required className="accent-border" />
+              </div>
             </div>
 
             <div className={styles.inputGroup}>
@@ -403,10 +408,10 @@ export default function AdminProducts() {
                       <td>{product.name}</td>
                       <td>EGP {product.price.toLocaleString()}</td>
                       <td>
-                        {product.inStock ? (
-                          <span style={{ color: 'green' }}>In Stock</span>
+                        {product.stock > 0 ? (
+                          <span style={{ color: 'green' }}>{product.stock} in stock</span>
                         ) : (
-                          <span style={{ color: 'red' }}>Out of Stock</span>
+                          <span style={{ color: 'red' }}>Sold Out</span>
                         )}
                       </td>
                       <td>
