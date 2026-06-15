@@ -157,10 +157,17 @@ export default function Shop() {
             </div>
           </div>
 
-          {/* Product Grid */}
           <div className={styles.productGrid}>
             {loading ? (
-              <p style={{ textAlign: 'center', width: '100%', padding: '2rem' }}>Loading collection...</p>
+              Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className={`${styles.productCard} glass-panel premium-shadow`} style={{ animation: `pulse 1.5s infinite ${i * 0.1}s` }}>
+                  <div style={{ width: '100%', height: '320px', backgroundColor: 'rgba(255,255,255,0.05)' }}></div>
+                  <div className={styles.productInfo}>
+                    <div style={{ width: '60%', height: '20px', backgroundColor: 'rgba(255,255,255,0.05)', margin: '0 auto 10px', borderRadius: '4px' }}></div>
+                    <div style={{ width: '40%', height: '20px', backgroundColor: 'rgba(255,255,255,0.05)', margin: '0 auto', borderRadius: '4px' }}></div>
+                  </div>
+                </div>
+              ))
             ) : filteredProducts.length > 0 ? (
               filteredProducts.map((product, i) => (
                 <div 
@@ -205,6 +212,13 @@ export default function Shop() {
           </div>
         </div>
       </div>
+      <style>{`
+        @keyframes pulse {
+          0% { opacity: 0.6; }
+          50% { opacity: 0.3; }
+          100% { opacity: 0.6; }
+        }
+      `}</style>
     </main>
   );
 }

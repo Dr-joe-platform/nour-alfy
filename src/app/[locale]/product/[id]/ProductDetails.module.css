@@ -121,6 +121,28 @@
   font-size: 1.1rem;
 }
 
+.whatsAppBtn {
+  margin-top: auto;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid var(--primary-gold);
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.95rem;
+  background-color: transparent;
+  color: var(--primary-gold);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.whatsAppBtn:hover {
+  background-color: var(--primary-gold);
+  color: var(--bg-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+}
+
 .similarProducts h2 {
   font-size: 2rem;
   font-weight: 300;

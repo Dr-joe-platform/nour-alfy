@@ -2,13 +2,50 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc, collection, query, where, limit, getDocs } from 'firebase/firestore';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import type { Metadata, ResolvingMetadata } from 'next';
 import Navbar from '@/components/Navbar';
 import AddToCartBtn from '@/components/AddToCartBtn';
 import ProductGallery from '@/components/ProductGallery';
 import WishlistBtn from '@/components/WishlistBtn';
+import WhatsAppOrderBtn from '@/components/WhatsAppOrderBtn';
 import styles from './ProductDetails.module.css';
 
-export default async function ProductDetails({ params }: { params: Promise<{ id: string }> }) {
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const docRef = doc(db, 'products', id);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists()) return { title: 'Product Not Found' };
+    
+    const product = docSnap.data();
+    let images: string[] = [];
+    try {
+      images = product.images ? JSON.parse(product.images) : [];
+    } catch (e) {}
+    const mainImage = images.length > 0 ? images[0] : '/products/bag1.jpeg';
+    
+    return {
+      title: `${product.name} | Nour Alfy`,
+      description: product.description,
+      openGraph: {
+        title: `${product.name} | Nour Alfy`,
+        description: product.description,
+        images: [mainImage],
+      },
+    };
+  } catch (error) {
+    return { title: 'Nour Alfy Product' };
+  }
+}
+
+export default async function ProductDetails({ params }: Props) {
   const { id } = await params;
   
   let product: any = null;
@@ -104,7 +141,7 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '1rem' }}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '1rem', flexWrap: 'wrap' }}>
               <AddToCartBtn 
                 product={{
                   id: product.id,
@@ -113,6 +150,16 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
                   img: mainImage
                 }} 
                 className={`${styles.addToCartBtn} bg-accent hover-glow`} 
+                style={{ flex: 1 }}
+              />
+              <WhatsAppOrderBtn 
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                }}
+                className={styles.whatsAppBtn}
+                style={{ flex: 1 }}
               />
               <WishlistBtn 
                 product={{

@@ -10,11 +10,13 @@ export const metadata: Metadata = {
     description: 'Premium handmade bags, wallets, perfumes, and custom designs by NOUR ALFY.',
     type: 'website',
     locale: 'en_EG',
+    images: [{ url: '/icon.png' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'NOUR ALFY | Handmade Products',
     description: 'Premium handmade bags, wallets, perfumes, and custom designs by NOUR ALFY.',
+    images: ['/icon.png'],
   }
 }
 
