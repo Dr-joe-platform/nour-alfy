@@ -312,7 +312,7 @@
   width: 100%;
   height: 350px;
   position: relative;
-  background: var(--border-color);
+  background: transparent;
   overflow: hidden;
 }
 

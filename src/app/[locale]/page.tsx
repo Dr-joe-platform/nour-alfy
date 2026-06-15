@@ -133,7 +133,7 @@ export default function Home() {
                     src={getFirstImage(product.images)} 
                     alt={product.name} 
                     fill 
-                    style={{ objectFit: 'cover' }} 
+                    style={{ objectFit: 'contain' }} 
                   />
                 </div>
                 <div className={styles.productInfo}>

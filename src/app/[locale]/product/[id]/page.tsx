@@ -157,7 +157,7 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
                         }} />
                       </div>
                       <div className={styles.productImageSm}>
-                        <img src={relImg} alt={relProd.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px' }} />
+                        <img src={relImg} alt={relProd.name} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '4px' }} />
                       </div>
                       <div className={styles.productInfoSm}>
                         <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{relProd.name}</h3>
