@@ -53,6 +53,17 @@ export default async function ProductDetails({ params }: { params: Promise<{ id:
       // Ensure we only have max 3 related products
       relatedProducts = relatedProducts.slice(0, 3);
     }
+    
+    // Fallback if no related products in the same category
+    if (relatedProducts.length === 0) {
+      const fallbackQ = query(collection(db, 'products'), limit(4));
+      const fallbackSnap = await getDocs(fallbackQ);
+      fallbackSnap.forEach((docSnap) => {
+        if (docSnap.id !== product.id && relatedProducts.length < 3) {
+          relatedProducts.push({ id: docSnap.id, ...docSnap.data() });
+        }
+      });
+    }
   } catch (error) {
     console.error("Firebase related products fetch error:", error);
   }
