@@ -169,30 +169,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className={styles.testimonialsSection}>
-        <div className={styles.sectionHeader}>
-          <h2 className="text-accent">What Our Clients Say</h2>
-          <div className={styles.divider}></div>
-        </div>
-        <div className={styles.testimonialsGrid}>
-          <div className={`${styles.testimonialCard} glass-panel premium-shadow`}>
-            <div className={styles.stars}>★★★★★</div>
-            <p className={styles.reviewText}>"The pearl beaded bag I ordered is an absolute masterpiece. The attention to detail in the beadwork is stunning!"</p>
-            <h4 className="text-accent">- Laila T.</h4>
-          </div>
-          <div className={`${styles.testimonialCard} glass-panel premium-shadow`}>
-            <div className={styles.stars}>★★★★★</div>
-            <p className={styles.reviewText}>"I requested a custom embroidery hoop for a wedding gift. It came out so beautiful and delicate. Truly talented hands."</p>
-            <h4 className="text-accent">- Omar H.</h4>
-          </div>
-          <div className={`${styles.testimonialCard} glass-panel premium-shadow`}>
-            <div className={styles.stars}>★★★★★</div>
-            <p className={styles.reviewText}>"The quality of the threads and beads used is top-notch. These aren't just accessories, they are pieces of art."</p>
-            <h4 className="text-accent">- Sarah M.</h4>
-          </div>
-        </div>
-      </section>
+
 
       {/* Instagram Feed Section */}
       <InstagramFeed />
