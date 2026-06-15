@@ -3,8 +3,8 @@ import nodemailer from 'nodemailer';
 export const transporter = nodemailer.createTransport({
   service: 'gmail', // You can change this if using another provider
   auth: {
-    user: process.env.SMTP_EMAIL,
-    pass: process.env.SMTP_PASSWORD,
+    user: process.env.SMTP_EMAIL || process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD || process.env.SMTP_PASS,
   },
 });
 
@@ -13,7 +13,10 @@ export async function sendNewProductEmail(
   product: { id: string; name: string; price: number; description: string | null; img: string | null },
   baseUrl: string
 ) {
-  if (!process.env.SMTP_EMAIL || !process.env.SMTP_PASSWORD) {
+  const emailUser = process.env.SMTP_EMAIL || process.env.SMTP_USER;
+  const emailPass = process.env.SMTP_PASSWORD || process.env.SMTP_PASS;
+
+  if (!emailUser || !emailPass) {
     throw new Error('SMTP credentials missing. Please add SMTP_EMAIL and SMTP_PASSWORD to your .env file.');
   }
 
@@ -53,7 +56,7 @@ export async function sendNewProductEmail(
   `;
 
   const mailOptions = {
-    from: `"NOUR ALFY" <${process.env.SMTP_EMAIL}>`,
+    from: `"NOUR ALFY" <${emailUser}>`,
     to: [], // We'll use bcc so subscribers don't see each other's emails
     bcc: subscribers,
     subject: `✨ New Arrival: ${product.name} | NOUR ALFY`,
