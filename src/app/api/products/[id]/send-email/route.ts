@@ -59,8 +59,8 @@ export async function POST(
     );
 
     return NextResponse.json({ success: true, message: `Email sent to ${emails.length} subscribers!` });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to send manual product email:', error);
-    return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Failed to send email' }, { status: 500 });
   }
 }

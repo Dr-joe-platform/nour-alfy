@@ -14,8 +14,7 @@ export async function sendNewProductEmail(
   baseUrl: string
 ) {
   if (!process.env.SMTP_EMAIL || !process.env.SMTP_PASSWORD) {
-    console.error('SMTP credentials missing. Cannot send emails.');
-    return;
+    throw new Error('SMTP credentials missing. Please add SMTP_EMAIL and SMTP_PASSWORD to your .env file.');
   }
 
   if (subscribers.length === 0) return;
@@ -66,5 +65,6 @@ export async function sendNewProductEmail(
     console.log(`Successfully sent new product email to ${subscribers.length} subscribers.`);
   } catch (error) {
     console.error('Error sending newsletter email:', error);
+    throw error;
   }
 }
