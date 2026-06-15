@@ -213,6 +213,27 @@ export default function AdminProducts() {
     }
   };
 
+  const handleSendEmail = async (id: string, name: string) => {
+    if (!confirm(`Are you sure you want to send a newsletter email to all subscribers for "${name}"?`)) return;
+    
+    const toastId = showToast('Sending email to subscribers...', 'info');
+    try {
+      const res = await fetch(`/api/products/${id}/send-email`, {
+        method: 'POST',
+      });
+      
+      const data = await res.json();
+      if (res.ok) {
+        showToast(data.message || 'Emails sent successfully!', 'success');
+      } else {
+        showToast(data.error || 'Failed to send emails.', 'error');
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+      showToast('An error occurred while sending emails.', 'error');
+    }
+  };
+
   const getFirstImage = (imagesStr: string | null) => {
     if (!imagesStr) return null;
     try {
@@ -389,6 +410,13 @@ export default function AdminProducts() {
                         )}
                       </td>
                       <td>
+                        <button 
+                          onClick={() => handleSendEmail(product.id, product.name)} 
+                          className={styles.actionBtn} 
+                          style={{ color: '#d4af37', borderColor: 'rgba(212, 175, 55, 0.2)', background: 'rgba(212, 175, 55, 0.1)', marginRight: '0.5rem' }}
+                        >
+                          Email
+                        </button>
                         <button 
                           onClick={() => handleEditClick(product)} 
                           className={styles.actionBtn} 
