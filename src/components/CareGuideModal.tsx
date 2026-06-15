@@ -8,35 +8,23 @@ interface CareGuideModalProps {
 }
 
 export default function CareGuideModal({ isOpen, onClose }: CareGuideModalProps) {
-  // Prevent scrolling when modal is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => { document.body.style.overflow = 'unset'; };
-  }, [isOpen]);
-
   if (!isOpen) return null;
 
   return (
     <div style={{
       position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
       backgroundColor: 'rgba(0,0,0,0.7)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
       zIndex: 1000,
       backdropFilter: 'blur(5px)',
       padding: '20px',
-      boxSizing: 'border-box'
+      overflowY: 'auto',
+      WebkitOverflowScrolling: 'touch'
     }}>
       <div 
         style={{
           backgroundColor: '#fdfbf7',
           width: '100%', maxWidth: '600px',
-          maxHeight: '100%',
-          display: 'flex',
-          flexDirection: 'column',
+          margin: '40px auto',
           borderRadius: '12px',
           boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
           position: 'relative',
@@ -57,12 +45,7 @@ export default function CareGuideModal({ isOpen, onClose }: CareGuideModalProps)
           <X size={24} />
         </button>
 
-        <div style={{ 
-          padding: '40px 30px', 
-          overflowY: 'auto', 
-          WebkitOverflowScrolling: 'touch',
-          flex: 1 
-        }}>
+        <div style={{ padding: '40px 30px' }}>
           <div style={{ textAlign: 'center', marginBottom: '30px' }}>
             <Sparkles size={32} color="var(--primary-gold)" style={{ marginBottom: '10px' }} />
             <h2 style={{ fontFamily: 'Georgia, serif', color: 'var(--primary-accent)', fontSize: '2rem', margin: 0 }}>Product Care Guide</h2>
