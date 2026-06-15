@@ -56,7 +56,7 @@ export async function POST(request: Request) {
       
       if (emails.length > 0) {
         const firstImage = images && images.length > 0 ? images[0] : null;
-        sendNewProductEmail(
+        await sendNewProductEmail(
           emails,
           { id: docRef.id, name, price: parseFloat(price), description, img: firstImage },
           baseUrl
