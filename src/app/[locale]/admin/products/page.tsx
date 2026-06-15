@@ -216,7 +216,7 @@ export default function AdminProducts() {
   const handleSendEmail = async (id: string, name: string) => {
     if (!confirm(`Are you sure you want to send a newsletter email to all subscribers for "${name}"?`)) return;
     
-    const toastId = showToast('Sending email to subscribers...', 'info');
+    const toastId = showToast('Sending email to subscribers...');
     try {
       const res = await fetch(`/api/products/${id}/send-email`, {
         method: 'POST',
@@ -224,13 +224,13 @@ export default function AdminProducts() {
       
       const data = await res.json();
       if (res.ok) {
-        showToast(data.message || 'Emails sent successfully!', 'success');
+        showToast(data.message || 'Emails sent successfully!');
       } else {
-        showToast(data.error || 'Failed to send emails.', 'error');
+        showToast(data.error || 'Failed to send emails.');
       }
     } catch (error) {
       console.error('Error sending email:', error);
-      showToast('An error occurred while sending emails.', 'error');
+      showToast('An error occurred while sending emails.');
     }
   };
 
