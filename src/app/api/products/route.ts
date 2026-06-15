@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, addDoc, serverTimestamp, query, orderBy } from 'firebase/firestore';
+import { sendNewProductEmail } from '@/lib/mailer';
 
 export async function GET() {
   try {
@@ -45,6 +46,25 @@ export async function POST(request: Request) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
+
+    // Send newsletter emails asynchronously (don't await so it doesn't block the response)
+    const baseUrl = request.headers.get('origin') || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    try {
+      const subscribersRef = collection(db, 'newsletterSubscribers');
+      const subSnapshot = await getDocs(subscribersRef);
+      const emails = subSnapshot.docs.map(doc => doc.data().email).filter(Boolean);
+      
+      if (emails.length > 0) {
+        const firstImage = images && images.length > 0 ? images[0] : null;
+        sendNewProductEmail(
+          emails,
+          { id: docRef.id, name, price: parseFloat(price), description, img: firstImage },
+          baseUrl
+        );
+      }
+    } catch (emailError) {
+      console.error('Error initiating newsletter emails:', emailError);
+    }
 
     return NextResponse.json({ id: docRef.id, ...data }, { status: 201 });
   } catch (error) {
