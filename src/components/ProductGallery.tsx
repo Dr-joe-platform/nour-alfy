@@ -10,7 +10,7 @@ export default function ProductGallery({ images }: { images: string[] }) {
   if (!images || images.length === 0) {
     return (
       <div className={styles.mainImage}>
-        <Image src="/products/bag1.jpeg" alt="Product" width={1000} height={1000} style={{ width: '100%', height: 'auto', borderRadius: '8px' }} />
+        <Image src="/products/bag1.jpeg" alt="Product" width={1000} height={1000} />
       </div>
     );
   }
@@ -18,7 +18,7 @@ export default function ProductGallery({ images }: { images: string[] }) {
   return (
     <div className={styles.imageSection}>
       <div className={styles.mainImage}>
-        <Image src={mainImage} alt="Product" width={1000} height={1000} style={{ width: '100%', height: 'auto', borderRadius: '8px' }} />
+        <Image src={mainImage} alt="Product" width={1000} height={1000} />
       </div>
       {images.length > 1 && (
         <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
