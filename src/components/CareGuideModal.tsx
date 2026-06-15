@@ -24,16 +24,18 @@ export default function CareGuideModal({ isOpen, onClose }: CareGuideModalProps)
     <div style={{
       position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
       backgroundColor: 'rgba(0,0,0,0.7)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      display: 'flex',
       zIndex: 1000,
       backdropFilter: 'blur(5px)',
-      padding: '20px'
+      padding: '20px',
+      overflowY: 'auto',
+      WebkitOverflowScrolling: 'touch'
     }}>
       <div 
         style={{
+          margin: 'auto',
           backgroundColor: '#fdfbf7',
           width: '100%', maxWidth: '600px',
-          maxHeight: '90vh', overflowY: 'auto',
           borderRadius: '12px',
           boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
           position: 'relative',
