@@ -52,21 +52,19 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
             const startOnInteraction = () => {
               if (isPlaying && audioRef.current) {
                 audioRef.current.play().then(() => {
-                  // Only remove listeners when successfully played
                   document.removeEventListener('click', startOnInteraction);
-                  document.removeEventListener('scroll', startOnInteraction);
                   document.removeEventListener('keydown', startOnInteraction);
                   document.removeEventListener('touchstart', startOnInteraction);
+                  document.removeEventListener('wheel', startOnInteraction);
                 }).catch(() => {
-                  // Still blocked, keep listening
+                  // Still blocked
                 });
               }
             };
-            // Listen to trusted gestures (no mousemove, it breaks browser policy)
             document.addEventListener('click', startOnInteraction);
-            document.addEventListener('scroll', startOnInteraction);
             document.addEventListener('keydown', startOnInteraction);
             document.addEventListener('touchstart', startOnInteraction);
+            document.addEventListener('wheel', startOnInteraction);
           });
         }
       } else {
