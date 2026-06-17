@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/components/ToastContext';
+import { db } from '@/lib/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import styles from '../orders/AdminOrders.module.css';
 
 export default function AdminSettings() {
@@ -10,6 +12,37 @@ export default function AdminSettings() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [globalVolume, setGlobalVolume] = useState(0.5);
+  const [isSavingVolume, setIsSavingVolume] = useState(false);
+
+  useEffect(() => {
+    const fetchVolume = async () => {
+      try {
+        const docSnap = await getDoc(doc(db, 'settings', 'audio'));
+        if (docSnap.exists() && docSnap.data().volume !== undefined) {
+          setGlobalVolume(docSnap.data().volume);
+        }
+      } catch (e) {
+        console.error("Error fetching volume", e);
+      }
+    };
+    fetchVolume();
+  }, []);
+
+  const handleVolumeChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVol = parseFloat(e.target.value);
+    setGlobalVolume(newVol);
+    
+    setIsSavingVolume(true);
+    try {
+      await setDoc(doc(db, 'settings', 'audio'), { volume: newVol }, { merge: true });
+    } catch (error) {
+      showToast('Failed to save volume setting');
+    } finally {
+      setIsSavingVolume(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,6 +135,32 @@ export default function AdminSettings() {
             {isSubmitting ? 'Updating...' : 'Update Password'}
           </button>
         </form>
+      </div>
+
+      <div className="glass-panel premium-shadow" style={{ padding: '2rem', borderRadius: '8px', marginTop: '2rem' }}>
+        <h3 className="text-accent" style={{ marginBottom: '1.5rem', fontSize: '1.5rem' }}>Global Website Audio</h3>
+        <p style={{ color: 'var(--secondary-text)', fontSize: '0.9rem', marginBottom: '1rem' }}>
+          Adjust the background music volume for all visitors on the website.
+        </p>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <span style={{ fontSize: '1.2rem' }}>🔈</span>
+          <input 
+            type="range" 
+            min="0" 
+            max="1" 
+            step="0.05" 
+            value={globalVolume}
+            onChange={handleVolumeChange}
+            style={{ flex: 1, accentColor: 'var(--primary-accent)' }}
+          />
+          <span style={{ fontSize: '1.2rem' }}>🔊</span>
+        </div>
+        
+        <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between', color: 'var(--secondary-text)', fontSize: '0.9rem' }}>
+          <span>Current Volume: {Math.round(globalVolume * 100)}%</span>
+          {isSavingVolume && <span className="text-accent">Saving...</span>}
+        </div>
       </div>
     </div>
   );

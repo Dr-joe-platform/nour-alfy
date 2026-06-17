@@ -1,6 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { db } from '@/lib/firebase';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 interface AudioContextType {
   isPlaying: boolean;
@@ -19,10 +21,21 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     // Using the user's custom MP3 file (added ?v=1 to bypass cache)
     const audio = new Audio('/audio/leberch-calm-509384.mp3?v=1');
     audio.loop = true;
-    audio.volume = 1.0; // 100% volume
+    audio.volume = 0.5; // Default volume
     audioRef.current = audio;
 
+    // Listen to Firebase for global volume
+    const unsub = onSnapshot(doc(db, 'settings', 'audio'), (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.volume !== undefined && audioRef.current) {
+          audioRef.current.volume = data.volume;
+        }
+      }
+    });
+
     return () => {
+      unsub();
       audio.pause();
       audioRef.current = null;
     };
@@ -60,6 +73,25 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         audioRef.current.pause();
       }
     }
+  }, [isPlaying]);
+
+  // Handle tab visibility
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!audioRef.current) return;
+      if (document.hidden) {
+        audioRef.current.pause();
+      } else if (isPlaying) {
+        audioRef.current.play().catch(() => {
+          // Autoplay policy might block it if no interaction happened yet
+        });
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [isPlaying]);
 
   useEffect(() => {
