@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect } from 'react';
 import { X, Sparkles, Droplets, Sun, Wind } from 'lucide-react';
+import { useAudio } from './AudioContext';
 
 interface CareGuideModalProps {
   isOpen: boolean;
@@ -8,6 +9,14 @@ interface CareGuideModalProps {
 }
 
 export default function CareGuideModal({ isOpen, onClose }: CareGuideModalProps) {
+  const { playInteractionSound } = useAudio();
+
+  useEffect(() => {
+    if (isOpen) {
+      playInteractionSound();
+    }
+  }, [isOpen, playInteractionSound]);
+
   if (!isOpen) return null;
 
   return (

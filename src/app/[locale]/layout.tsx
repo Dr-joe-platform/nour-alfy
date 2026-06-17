@@ -24,6 +24,7 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { CartProvider } from '@/components/CartContext'
 import { ToastProvider } from '@/components/ToastContext'
 import { WishlistProvider } from '@/components/WishlistContext'
+import { AudioProvider } from '@/components/AudioContext'
 import CartDrawer from '@/components/CartDrawer'
 import ConditionalFooter from '@/components/ConditionalFooter'
 import WhatsAppWidget from '@/components/WhatsAppWidget'
@@ -56,18 +57,20 @@ export default async function LocaleLayout({
       <body className={isArabic ? 'font-arabic' : ''}>
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
-            <ToastProvider>
-              <WishlistProvider>
-                <CartProvider>
-                  <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-                    {children}
-                    <ConditionalFooter />
-                  </div>
-                  <CartDrawer />
-                  <WhatsAppWidget />
-                </CartProvider>
-              </WishlistProvider>
-            </ToastProvider>
+            <AudioProvider>
+              <ToastProvider>
+                <WishlistProvider>
+                  <CartProvider>
+                    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                      {children}
+                      <ConditionalFooter />
+                    </div>
+                    <CartDrawer />
+                    <WhatsAppWidget />
+                  </CartProvider>
+                </WishlistProvider>
+              </ToastProvider>
+            </AudioProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

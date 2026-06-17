@@ -2,16 +2,18 @@
 
 import {Link, usePathname, useRouter} from '@/i18n/routing';
 import { useTranslations, useLocale } from 'next-intl';
-import { ShoppingCart, Menu, X, Sun, Moon, Heart } from 'lucide-react';
+import { ShoppingCart, Menu, X, Sun, Moon, Heart, Volume2, VolumeX } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTheme } from './ThemeProvider';
 import { useCart } from './CartContext';
 import { useWishlist } from './WishlistContext';
+import { useAudio } from './AudioContext';
 import styles from './Navbar.module.css';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const { isPlaying, toggleAudio, playInteractionSound } = useAudio();
   const { cart, setIsCartOpen } = useCart();
   const { wishlist } = useWishlist();
   const [isVisible, setIsVisible] = useState(true);
@@ -72,6 +74,19 @@ export default function Navbar() {
         </div>
 
         <div className={styles.navActions}>
+          <button 
+            onClick={() => {
+              toggleAudio();
+              if (!isPlaying) {
+                setTimeout(playInteractionSound, 100);
+              }
+            }} 
+            className={`${styles.iconBtn} text-accent hover-glow`} 
+            aria-label="Toggle Audio"
+          >
+            {isPlaying ? <Volume2 size={24} /> : <VolumeX size={24} />}
+          </button>
+
           <button onClick={toggleTheme} className={`${styles.iconBtn} text-accent hover-glow`} aria-label="Toggle Theme">
             {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
           </button>
