@@ -5,6 +5,8 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import { useTranslations } from 'next-intl';
 import InstagramFeed from '@/components/InstagramFeed';
+import MarqueeBanner from '@/components/MarqueeBanner';
+import { motion } from 'framer-motion';
 import styles from './page.module.css';
 
 export default function Home() {
@@ -72,8 +74,16 @@ export default function Home() {
         </div>
       </section>
 
+      <MarqueeBanner />
+
       {/* The Craft Section */}
-      <section className={styles.craftSection}>
+      <motion.section 
+        className={styles.craftSection}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
         <div className={styles.craftContainer}>
           <div className={styles.craftText}>
             <h2 className="text-accent">The Art of Beadwork</h2>
@@ -95,10 +105,16 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Categories Section */}
-      <section className={styles.categories}>
+      <motion.section 
+        className={styles.categories}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
         <h2 className={`text-accent ${styles.sectionTitle}`}>Curated Collections</h2>
         <div className={styles.categoryGrid}>
           <Link href="/shop?category=Beaded+Bags" className={`${styles.categoryCard} premium-shadow`}>
@@ -120,10 +136,16 @@ export default function Home() {
             </div>
           </Link>
         </div>
-      </section>
+      </motion.section>
 
       {/* Featured Masterpieces */}
-      <section className={styles.featured}>
+      <motion.section 
+        className={styles.featured}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8 }}
+      >
         <h2 className={`text-accent ${styles.sectionTitle}`}>{t('featuredTitle')}</h2>
         <div className={styles.productGrid}>
           {featuredProducts.length > 0 ? (
@@ -136,6 +158,9 @@ export default function Home() {
                     fill 
                     style={{ objectFit: 'contain' }} 
                   />
+                  <div className={styles.quickViewOverlay}>
+                    <span className={styles.quickViewBtn}>Quick View</span>
+                  </div>
                 </div>
                 <div className={styles.productInfo}>
                   <span className={styles.categoryLabel}>{product.category}</span>
@@ -153,10 +178,16 @@ export default function Home() {
             {t('viewShop')}
           </Link>
         </div>
-      </section>
+      </motion.section>
 
       {/* Custom Orders Banner */}
-      <section className={styles.customOrderBanner}>
+      <motion.section 
+        className={styles.customOrderBanner}
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
         <div className={`${styles.customOverlay} glass-panel`}>
           <h2 className="text-accent">Have a Unique Vision?</h2>
           <p>
@@ -167,7 +198,7 @@ export default function Home() {
             Request Custom Design
           </Link>
         </div>
-      </section>
+      </motion.section>
 
 
 
