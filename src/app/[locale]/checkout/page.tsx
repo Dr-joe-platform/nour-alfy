@@ -186,13 +186,6 @@ export default function Checkout() {
     }
   };
 
-  const handleWhatsApp = () => {
-    if (!placedOrder) return;
-    const phoneNumber = "201022702111";
-    const message = `Hello NOUR ALFY! I just placed a new order.%0A%0A*Order ID:* ${placedOrder.orderId}%0A*Name:* ${placedOrder.customerName}%0A*Phone:* ${placedOrder.customerPhone}%0A*Total:* EGP ${placedOrder.totalAmount.toLocaleString()}%0A%0APlease confirm my order.`;
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
-  };
-
   if (successOrderId && placedOrder) {
     return (
       <main className={styles.main}>
@@ -206,13 +199,6 @@ export default function Checkout() {
           </div>
 
           <div style={{ marginTop: '3rem' }}>
-            <button 
-              onClick={handleWhatsApp} 
-              className={`${styles.payBtn} hover-glow`} 
-              style={{ width: 'auto', padding: '1rem 3rem', background: '#25D366', border: 'none', color: '#fff', marginRight: '1rem', fontWeight: 'bold' }}
-            >
-              Confirm via WhatsApp
-            </button>
             <button 
               onClick={() => window.print()} 
               className={`${styles.payBtn} bg-accent hover-glow`} 
