@@ -35,6 +35,7 @@ import CustomCursor from '@/components/CustomCursor'
 
 import {NextIntlClientProvider} from 'next-intl';
 import {getMessages} from 'next-intl/server';
+import Script from 'next/script';
 
 export default async function LocaleLayout({
   children,
@@ -50,6 +51,18 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={isArabic ? 'rtl' : 'ltr'}>
       <head>
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-GRKY18266C"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-GRKY18266C');
+          `}
+        </Script>
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
