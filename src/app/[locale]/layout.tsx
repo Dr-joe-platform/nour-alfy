@@ -17,6 +17,9 @@ export const metadata: Metadata = {
     title: 'NOUR ALFY | Handmade Products',
     description: 'Premium handmade bags, wallets, perfumes, and custom designs by NOUR ALFY.',
     images: ['/icon.png'],
+  },
+  verification: {
+    google: '_SEzDShIhgeGVoTBG8ayyAYAcoyXDudzfOMY-_tYx7I',
   }
 }
 
