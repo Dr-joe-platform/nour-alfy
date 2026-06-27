@@ -1,5 +1,4 @@
 import React from 'react';
-import Script from 'next/script';
 
 const InstagramIcon = ({ size = 24, color = "currentColor" }) => (
   <svg 
@@ -37,20 +36,6 @@ export default function InstagramFeed() {
         </a>
         <p style={{ color: 'var(--secondary-text)', marginTop: '10px' }}>Join our community for the latest handcrafted designs.</p>
       </div>
-
-      <div style={{ maxWidth: '1200px', margin: '0 auto', minHeight: '300px' }}>
-        <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
-        <div className="elfsight-app-79732767-1095-47c7-adba-36f0c037e003" data-elfsight-app-lazy></div>
-      </div>
-
-      <style>{`
-        /* Hide Elfsight Free Badge */
-        .elfsight-app-79732767-1095-47c7-adba-36f0c037e003 a[href*="elfsight"] {
-          display: none !important;
-          opacity: 0 !important;
-          visibility: hidden !important;
-        }
-      `}</style>
     </section>
   );
 }

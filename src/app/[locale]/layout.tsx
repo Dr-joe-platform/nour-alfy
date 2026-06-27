@@ -31,7 +31,7 @@ import { AudioProvider } from '@/components/AudioContext'
 import CartDrawer from '@/components/CartDrawer'
 import ConditionalFooter from '@/components/ConditionalFooter'
 import WhatsAppWidget from '@/components/WhatsAppWidget'
-import CustomCursor from '@/components/CustomCursor'
+
 
 import {NextIntlClientProvider} from 'next-intl';
 import {getMessages} from 'next-intl/server';
@@ -84,7 +84,7 @@ export default async function LocaleLayout({
                     </div>
                     <CartDrawer />
                     <WhatsAppWidget />
-                    <CustomCursor />
+
                   </CartProvider>
                 </WishlistProvider>
               </ToastProvider>
